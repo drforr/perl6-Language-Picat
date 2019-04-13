@@ -1,0 +1,151 @@
+/*
+
+  de Bruijn sequence in Picat.
+
+  Implementation of de Bruijn sequences in Comet, both "classical" 
+  and "arbitrary". 
+ 
+  Compare with the the web based programs:
+    http://www.hakank.org/comb/debruijn.cgi   
+    http://www.hakank.org/comb/debruijn_arb.cgi
+
+  For Base = 2, N = 3, M = 8 there are 2 solutions:
+    x : [](0, 1, 3, 7, 6, 5, 2, 4)
+    bincode : [0, 0, 0, 1, 1, 1, 0, 1]
+
+    x : [](0, 1, 2, 5, 3, 7, 6, 4)
+    bincode : [0, 0, 0, 1, 0, 1, 1, 1]
+
+  Model created by Hakan Kjellerstrand, hakank@gmail.com
+  See also my Picat page: http://www.hakank.org/picat/
+
+*/
+
+import cp,util.
+
+main => go.
+
+%
+% converts a number Num to/from a list of integer List given a base Base
+%
+to_num(List, Base, Num) =>
+        Len = length(List),
+        Num #= sum([List[I]*Base**(Len-I) : I in 1..Len]).
+
+
+%
+% de Bruijn sequence with 
+%   Base: base to use
+%   N: length of each element (row)
+%   M: length of sequence
+%
+deBruijn(Base, N, M, X, Binary, BinCode) =>
+
+        %
+        % X: list of the integers to use which are converted to
+        %    base-ary numbers below
+        %
+        X = new_list(M),
+        X :: 0..(Base**N)-1,
+
+        % all_different(X),
+        all_distinct(X),
+
+        %
+        % Binary: the matrix of the "fully expanded" integers in X
+        %
+        Binary = new_array(M, N),
+        Binary :: 0..Base-1,
+        foreach(I in 1..M)
+              % convert the integer to base-ary representation
+              to_num([Binary[I,J] : J in 1..N], Base, X[I])
+        end,
+
+        %
+        % The de Bruijn criterion: Connect one element to the next...
+        %
+        foreach(I in 2..M, J in 2..N) 
+           Binary[I-1, J] #= Binary[I, J-1]
+        end,
+        
+        % ... and around the corner.
+        foreach(J in 2..N) 
+           Binary[M, J] #= Binary[1, J-1] 
+        end,
+        
+        
+        % 
+        % BinCode: The de Bruijn sequence, i.e. the first
+        %          elements in each row in Binary
+        %          Note: this is just a slice.
+        BinCode = [Binary[I,1] : I in 1..M],
+
+        % symmetry breaking
+        X[1] #= min(X),
+
+        Flattened = X ++ Binary,
+        solve([ff,split],Flattened).
+        
+
+% wrapper
+do_it(Base, N, M, Tmp) =>
+        println([base=Base, n=N, m=M, '(Base**N)-1)'=(Tmp)]),
+        deBruijn(Base, N, M, X, Binary, BinCode),
+        println(x=X),
+        % println(binary=Binary),
+        foreach(B in Binary) println(B.to_list()) end,
+        println(debruijn=[I.to_string() : I in BinCode].join('')),
+        printf("\n").
+
+do_it2(Base, N, M, Tmp) =>
+        deBruijn(Base, N, M, X, Binary, BinCode),
+        println([to_string(B) : B in BinCode].join('')).
+
+
+
+
+% Let's start simple: This has 2 solutions.
+go ?=>
+        Base = 2,
+        N = 3,
+        M = Base**N,
+        Tmp = Base**N-1,
+        do_it2(Base, N, M, Tmp),
+        fail.
+
+go => true.
+
+% This is an "arbitrary" de Bruijn sequence, i.e. the length of
+% the sequence is 52, i.e. < Base**N.
+% Many solutions.
+go2 ?=>
+        Base = 13,
+        N = 4,
+        M = 52,
+        Tmp = Base**N-1,
+        do_it(Base, N, M, Tmp),
+        fail.
+
+go2 => true.
+
+% The "door code" sequence, i.e. all codes of length 4 in for 0..9.
+go3 =>
+        Base = 10,
+        N = 4,
+        M = Base**N,
+        Tmp = Base**N-1,
+        do_it(Base, N, M, Tmp).
+
+go4 ?=>
+        Map = get_global_map(),
+        Map.put(count,0),
+        Base = 2,
+        N = 5,
+        M = 27,
+        Tmp = Base**N-1,
+        do_it(Base, N, M, Tmp),
+        Map.put(count,Map.get(count)+1),
+        fail.
+
+go4 => 
+  println(count=get_global_map().get(count)).

@@ -1,0 +1,20 @@
+{
+  "auth" : "cpan:JGOFF",
+  "authors" : [
+    "Jeffrey Goff"
+  ],
+  "build-depends" : [ ],
+  "depends" : [ ],
+  "description" : "blah blah blah",
+  "license" : "Artistic-2.0",
+  "name" : "Language::Picat",
+  "perl" : "6.c",
+  "provides" : {
+    "Language::Picat" : "lib/Language/Picat.pm6"
+  },
+  "resources" : [ ],
+  "source-url" : "",
+  "tags" : [ ],
+  "test-depends" : [ ],
+  "version" : "0.0.1"
+}

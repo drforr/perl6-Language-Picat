@@ -1,0 +1,9 @@
+.*.sw[a-z]
+/blib/
+/src/*.o
+/src/Makefile
+/.panda-work
+/resources/*.so
+/resources/*.dylib
+.precomp/
+/Language-Picat-*

@@ -1,0 +1,91 @@
+/* 
+
+  Euler #39 in Picat.
+
+  """
+  If p is the perimeter of a right angle triangle with integral length sides, 
+  {a,b,c}, there are exactly three solutions for p = 120.
+   
+  {20,48,52}, {24,45,51}, {30,40,50}
+   
+  For which value of p <= 1000, is the number of solutions maximised?
+  """
+
+
+  This Picat model was created by Hakan Kjellerstrand, hakank@gmail.com
+  See also my Picat page: http://www.hakank.org/picat/
+
+*/
+
+import util.
+import cp.
+
+main => go.
+
+go => time(euler39).
+
+% 0.20s
+euler39 =>
+  N = 1000-1,
+  Squares = new_map([(X*X)=1 : X in 1..N]),
+  Valid = [[X,Y] : X in Squares.keys(), Y in Squares.keys(),
+            X < Y, (sqrt(X) + sqrt(X) + sqrt(X+Y)) < 1000, Squares.has_key(X+Y)],
+  Counts = new_map(),
+  foreach([X2,Y2] in Valid) 
+    C = (sqrt(X2) + sqrt(Y2) + sqrt(X2+Y2)).toint(),
+    Counts.put(C, Counts.get(C,0)+1)
+  end,
+  P = max([V : _K=V in Counts]),
+  println([[n=I,c=C] : I=C in Counts, C == P].first()).
+
+
+% slightly different (and slower) approach
+% 0.54s
+euler39a =>
+  N = 1000-1,
+  Squares = [X*X : X in 1..N],
+  Valid = [[X,Y] : X in Squares, Y in Squares,
+            X < Y, (sqrt(X) + sqrt(X) + sqrt(X+Y)) < 1000, membchk(X+Y,Squares)],
+
+  Counts = new_map(),
+  foreach([X2,Y2] in Valid) 
+    C = (sqrt(X2) + sqrt(Y2) + sqrt(X2+Y2)).toint(),
+    Counts.put(C, Counts.get(C,0)+1)
+  end,
+  P = max([V : _K=V in Counts]),
+  println([[n=I,c=C] : I=C in Counts, C == P].first()).
+
+
+
+table
+toint(I) = to_integer(I).
+
+euler39b => 
+  Max = 0,
+  N = 0,
+  foreach(I in 2..1000) 
+     Num = p39b(I) -> 
+       if Num > Max then
+          Max := Num,
+          N := I
+       end
+     ;  
+     true
+  end,
+  writeln([n=N, max=Max]),
+  nl.
+
+% 8.26s
+p39b(I) = N =>
+    Vars = [A, B, C],
+    Vars :: 1..I div 2 + 1,
+    increasing(Vars),
+    % A #=< B, B #=< C,
+    A + B #> C,
+    A + B + C #= I,
+    A * A + B * B #= C * C,
+    N = solve_all([forward, split], Vars).length.
+
+
+increasing(List) =>
+   foreach(I in 2..List.length) List[I-1] #=< List[I] end.

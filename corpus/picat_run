@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# This is just a wrapper for running the 
+#    picat run_program.pi picat_program arg1 [arg2]
+#
+PICAT_ME=/home/hakank/picat/me
+RUN_PROGRAM=${PICAT_ME}/run_program.pi
+if [ "$#" -eq 1 ]; then
+   picat -log $RUN_PROGRAM $@ go
+else
+   picat -log $RUN_PROGRAM $@
+fi

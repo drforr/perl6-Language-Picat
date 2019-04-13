@@ -1,0 +1,530 @@
+/*
+
+  Sudoku solver in Picat.
+
+  Some of the problem instances (and some idea) are from 
+  ECLiPSe's Sudoku model: 
+       http://eclipseclp.org/examples/sudoku.ecl.txt
+
+
+  Model created by Hakan Kjellerstrand, hakank@gmail.com
+  See also my Picat page: http://www.hakank.org/picat/
+
+*/
+
+import util.
+import cp.
+import os.
+
+main => go.
+
+go =>
+   time2(sudoku(1)).
+
+% Using sudoku2/2
+go1 =>
+   problem(13, Board),
+   print_board(Board),
+   time2(sudoku2(3,Board)),
+   print_board(Board).
+
+
+%
+% Test all problems 
+%
+go2 =>
+   foreach(P in 1..13)
+      writeln(problem=P),
+      time2(sudoku(P)),
+      nl
+   end.
+
+%
+% Test all problems 
+%
+go3 =>
+   foreach(P in 1..13)
+      writeln(problem=P),
+      L = findall(P,sudoku2(P)),
+      Len = length(L),
+      writeln(len=Len),
+      if Len > 1 then
+          writeln('This has more than one solution!')
+      end,
+      nl
+   end.
+
+
+%
+% Just checking the model: It should be a unique solution, and it is.
+%
+go4 =>
+   problem(12,Board),
+   All = findall(Board, (time2(sudoku(3,Board)))),
+   foreach(B in All) print_board(B) end.
+
+go5 ?=>
+   problem(14,Board),
+   sudoku2(3,Board),
+   print_board(Board),
+   fail.
+
+go5 => true.
+
+
+%
+% Solving Norvig's 95 Sudoku's
+% http://norvig.com/top95.txt
+% 
+go6 => 
+   File = "top95.txt",
+   if not exists(File) then
+      printf("The file %w don't exists. Please donwload from http://norvig.com/top95.txt\n", File),
+      halt
+   else 
+      Sudokus = read_file_lines(File)
+   end,
+   N = 1,
+   foreach(Line in Sudokus)
+       printf("Sudoku #%d\n", N),
+       Sudoku1 = [cond(C=='.',_,to_integer(C)) : C in Line], 
+       Sudoku = [slice(Sudoku1,1+I*9,9+I*9) : I in 0..8],
+       print_board(Sudoku),
+       time2(All = findall(Sudoku, sudoku(3,Sudoku))),
+       if All.length != 1 then
+         printf("Sudoku #%d don't have a unique solution!", N),
+         halt
+       end,
+       foreach(S in All)
+         print_board(S)
+       end,
+       nl,
+       N := N + 1
+   end,
+   nl.
+  
+
+% 
+% Solving Gordon Royle's 17 hint Sudoku puzzles
+% The 49151 puzzles with 17 hints are available here:
+% http://staffhome.ecm.uwa.edu.au/~0001e3890/sudoku17
+% See
+% http://staffhome.ecm.uwa.edu.au/~00013890/sudokumin.php
+% 
+% Note: Some of the times are too large due to garbage collection
+%       interferes, see below for this
+%
+% ffd/split:
+% 13:54min total runtime
+% 825.4s solve time (13:45min)
+% 
+% ffd/down:
+% 12:00min total runtime
+% 711.21s solve time (11:51min)
+%
+% The following problem took more than 1s to solve:
+%
+% Sudoku #1977 Time: (1004 ms)  <- slow
+% Sudoku #14293 Time: (1172 ms) <- slow
+% Sudoku #14474 Time: (1956 ms) (<-- spurious, garbage collection)
+% Sudoku #16447 Time: (1084 ms) <- slow
+% Sudoku #30050 Time: (3821 ms) (<-- spurious, garbage collection)
+% Sudoku #41189 Time: (1008 ms) <- slow
+% Sudoku #42962 Time: (1224 ms) <- slow
+% 
+% Another run:
+% Sudoku #1977 Time: (1000 ms) <- slow
+% Sudoku #7266 Time: (1036 ms) (<- spurious)
+% Sudoku #14293 Time: (1172 ms) <- slow
+% Sudoku #15630 Time: (2048 ms) (<- spurious)
+% Sudoku #16447 Time: (1084 ms) <- slow
+% Sudoku #32364 Time: (4012 ms) (<-- spurious)
+% Sudoku #42962 Time: (1212 ms) <- slow
+% 
+%
+% When running each instance isolated (via an external program),
+% then we don't get the very large times (>= 2000ms), these instances
+% seems to be the stable slow (>= 1s) ones.
+%
+% #1977 time: 1048ms
+% #14293 time: 1184ms
+% #16447 time: 1088ms
+% #41189 time: 1008ms
+% #42962 time: 1224ms
+%
+go7 => 
+   File = "sudoku17",
+   if not exists(File) then
+      printf("The file %w don't exists.\nPlease donwload from http://staffhome.ecm.uwa.edu.au/~0001e3890/sudoku17\n", File),
+      halt
+   else 
+      Sudokus = read_file_lines(File)
+   end,
+
+   N = 1,
+   TotalTimes = 0,
+   foreach(Line in Sudokus)
+       Sudoku1 = [cond(C='0',_,to_integer(C)) : C in Line], 
+       Sudoku = [slice(Sudoku1,1+I*9,9+I*9) : I in 0..8],
+       % print_board(Sudoku),
+       _ = statistics_all(),
+       statistics(runtime,_),
+       sudoku(3,Sudoku),
+       % time2(sudoku(3,Sudoku)),
+       statistics(runtime,[_,Time]),
+       TotalTimes := TotalTimes + Time,
+       Stat = statistics_all(),
+       printf("%% Sudoku #%d Time: (%d ms) Stat: %w\n", N, Time, Stat),
+       N := N + 1
+   end,
+   println(totalTimes=TotalTimes),
+   TotalSec = TotalTimes / 1000,
+   println(totalSec=TotalSec),
+   nl.
+
+%
+% Checking the reported slow instances
+%
+go7b => 
+         % instance# = reported millis in go7
+   Slow = new_map([1977=1004,
+                   14293=1172, 
+                   14474=1956, 
+                   16447=1084, 
+                   30049=0000, 
+                   30050=3821,     
+                   41189=1008,
+                   42962=1224
+                   ]),
+
+   SlowIds = Slow.keys().sort(),
+
+   File = "sudoku17",
+   if not exists(File) then
+      printf("The file %w don't exists.\nPlease donwload from http://staffhome.ecm.uwa.edu.au/~0001e3890/sudoku17\n", File),
+      halt
+   else 
+      Sudokus = read_file_lines(File)
+   end,
+   N = 1,
+   statistics(runtime,_),
+   TotalTimes = 0,
+   statistics(runtime,_),
+   foreach(Line in Sudokus)
+       % garbage_collect,
+       Sudoku1 = [cond(C='0',_,to_integer(C)) : C in Line], 
+       Sudoku = [slice(Sudoku1,1+I*9,9+I*9) : I in 0..8],
+       if member(N,SlowIds) then
+         print_board(Sudoku),
+         sudoku(3,Sudoku),
+         print_board(Sudoku),
+         statistics(runtime,[_,Time]),
+         TotalTimes := TotalTimes + Time,
+         println(time=Time),
+         printf("%% Sudoku #%d Time: (%d ms) (cf reported: %d)\n", N, Time, Slow.get(N)),
+         nl
+       end,
+       N := N + 1
+   end,
+   println(totalTimes=TotalTimes),
+   TotalSec = TotalTimes / 1000,
+   println(totalSec=TotalSec),
+   nl.
+
+
+
+sudoku(ProblemName) =>
+	problem(ProblemName, Board),
+	print_board(Board),
+	sudoku(3, Board),
+	print_board(Board).
+
+
+% Don't print the solution (for go4/0)
+sudoku2(ProblemName) =>
+	problem(ProblemName, Board),
+	sudoku(3, Board).
+
+
+latin_square(Board) =>
+   foreach(Row in Board) all_different(Row) end,
+   foreach(Column in transpose(Board)) all_different(Column) end.
+
+% Using rows() and columns() from the util module instead.
+latin_square2(Board) => 
+   foreach(Row in Board.rows()) all_different(Row) end,
+   foreach(Column in Board.columns()) all_different(Column) end.
+
+
+sudoku(N, Board) =>
+   N2 = N*N,
+
+   Vars = Board.vars(),
+   Vars :: 1..N2,
+
+   % latin_square2(Board),
+   foreach(Row in Board) all_different(Row) end,
+   foreach(Column in transpose(Board)) all_different(Column) end,
+   foreach(I in 1..N..N2, J in 1..N..N2)
+      all_different([Board[I+K,J+L] : K in 0..N-1, L in 0..N-1])
+   end,
+
+   % println(vars=Vars),
+
+   solve([ffd,down], Vars). % faster overall
+
+   % solve([ffd,split], Vars). % faster on the slower instances
+
+   % solve([ff,updown], Vars). % faster on slower instances
+   % solve([constr,updown], Vars). % slower
+
+
+%
+% Another approach, using matrix extraction slice/2.
+%
+sudoku2(N, Board) =>
+   N2 = N*N,
+
+   Vars = Board.vars(),
+   Vars :: 1..N2,
+
+   foreach(I in 1..N2)
+     Board.slice2(I,1..N2).all_different(),
+     Board.slice2(1..N2,I).all_different()     
+   end,
+
+   foreach(I in 1..N..N2, J in 1..N..N2)
+      % Note: we must flatten the sub matrix
+      Board.slice2([I+K:K in 0..N-1],[J+L:L in 0..N-1]).flatten().all_different()
+   end,
+
+   solve([ff,down], Vars).
+
+
+print_board(Board) =>
+   N = Board.length,
+   foreach(I in 1..N)
+      foreach(J in 1..N)
+         X = Board[I,J],
+         if var(X) then printf("  _") else printf("  %w", X) end
+      end,
+      nl
+   end,
+   nl.
+
+
+% Returns the list/array M[I,Range2]
+slice2(Matrix, I,Range2) = [ Matrix[I,J] : J in Range2], list(Matrix), integer(I),list(Range2) => true.
+
+% Returns the list/array M[Range1,J]
+slice2(Matrix, Range1,J) = [Matrix[I,J] : I in Range1 ], list(Matrix), list(Range1), integer(J) => true.
+
+% Returns the list/array matrix M[Range1,Range2]
+slice2(Matrix, Range1,Range2) = [ [Matrix[I,J] : I in Range1 ] : J in Range2], list(Matrix) => true.
+
+
+
+%----------------------------------------------------------------------
+% Sample data
+%----------------------------------------------------------------------
+
+problem(1, Data) => 
+Data = [
+    [_, _, 2, _, _, 5, _, 7, 9],
+    [1, _, 5, _, _, 3, _, _, _],
+    [_, _, _, _, _, _, 6, _, _],
+    [_, 1, _, 4, _, _, 9, _, _],
+    [_, 9, _, _, _, _, _, 8, _],
+    [_, _, 4, _, _, 9, _, 1, _],
+    [_, _, 9, _, _, _, _, _, _],
+    [_, _, _, 1, _, _, 3, _, 6],
+    [6, 8, _, 3, _, _, 4, _, _]].
+
+problem(2, Data) => 
+ Data = [
+    [_, _, 3, _, _, 8, _, _, 6],
+    [_, _, _, 4, 6, _, _, _, _],
+    [_, _, _, 1, _, _, 5, 9, _],
+    [_, 9, 8, _, _, _, 6, 4, _],
+    [_, _, _, _, 7, _, _, _, _],
+    [_, 1, 7, _, _, _, 9, 5, _],
+    [_, 2, 4, _, _, 1, _, _, _],
+    [_, _, _, _, 4, 6, _, _, _],
+    [6, _, _, 5, _, _, 8, _, _]].
+
+problem(3, Data) => 
+Data = [
+    [_, _, _, 9, _, _, _, _, _],
+    [_, _, 7, _, 6, _, 5, _, _],
+    [_, _, 3, 5, _, _, _, 7, 9],
+    [4, _, 5, _, _, 9, _, _, 1],
+    [8, _, _, _, _, _, _, _, 7],
+    [1, _, _, 6, _, _, 9, _, 8],
+    [6, 4, _, _, _, 8, 7, _, _],
+    [_, _, 9, _, 1, _, 2, _, _],
+    [_, _, _, _, _, 7, _, _, _]].
+
+problem(4, Data) => 
+Data = [
+    [_, 5, _, _, _, 1, 4, _, _], 
+    [2, _, 3, _, _, _, 7, _, _], 
+    [_, 7, _, 3, _, _, 1, 8, 2], 
+    [_, _, 4, _, 5, _, _, _, 7], 
+    [_, _, _, 1, _, 3, _, _, _], 
+    [8, _, _, _, 2, _, 6, _, _], 
+    [1, 8, 5, _, _, 6, _, 9, _], 
+    [_, _, 2, _, _, _, 8, _, 3], 
+    [_, _, 6, 4, _, _, _, 7, _]].
+
+% Problems 5-8 are harder, taken from
+% http://www2.ic-net.or.jp/~takaken/auto/guest/bbs46.html
+problem(5, Data) => Data = [
+    [_, 9, 8, _, _, _, _, _, _],
+    [_, _, _, _, 7, _, _, _, _],
+    [_, _, _, _, 1, 5, _, _, _],
+    [1, _, _, _, _, _, _, _, _],
+    [_, _, _, 2, _, _, _, _, 9],
+    [_, _, _, 9, _, 6, _, 8, 2],
+    [_, _, _, _, _, _, _, 3, _],
+    [5, _, 1, _, _, _, _, _, _],
+    [_, _, _, 4, _, _, _, 2, _]].
+
+problem(6, Data) => 
+Data = [
+    [_, _, 1, _, 2, _, 7, _, _],
+    [_, 5, _, _, _, _, _, 9, _],
+    [_, _, _, 4, _, _, _, _, _],
+    [_, 8, _, _, _, 5, _, _, _],
+    [_, 9, _, _, _, _, _, _, _],
+    [_, _, _, _, 6, _, _, _, 2],
+    [_, _, 2, _, _, _, _, _, _],
+    [_, _, 6, _, _, _, _, _, 5],
+    [_, _, _, _, _, 9, _, 8, 3]].
+
+problem(7, Data) => 
+Data = [
+    [1, _, _, _, _, _, _, _, _],
+    [_, _, 2, 7, 4, _, _, _, _],
+    [_, _, _, 5, _, _, _, _, 4],
+    [_, 3, _, _, _, _, _, _, _],
+    [7, 5, _, _, _, _, _, _, _],
+    [_, _, _, _, _, 9, 6, _, _],
+    [_, 4, _, _, _, 6, _, _, _],
+    [_, _, _, _, _, _, _, 7, 1],
+    [_, _, _, _, _, 1, _, 3, _]].
+
+problem(8, Data) => 
+Data = [
+    [1, _, 4, _, _, _, _, _, _],
+    [_, _, 2, 7, 4, _, _, _, _],
+    [_, _, _, 5, _, _, _, _, _],
+    [_, 3, _, _, _, _, _, _, _],
+    [7, 5, _, _, _, _, _, _, _],
+    [_, _, _, _, _, 9, 6, _, _],
+    [_, 4, _, _, _, 6, _, _, _],
+    [_, _, _, _, _, _, _, 7, 1],
+    [_, _, _, _, _, 1, _, 3, _]].
+
+
+% BBC Focus magazine October 2005
+problem(9, Data) => 
+Data = [
+    [_, 6, _, 3, 2, _, _, 7, _],
+    [4, 7, _, _, _, _, _, 3, 2],
+    [_, _, _, 9, _, _, 1, 4, 6],
+    [2, 4, _, 8, _, _, _, _, _],
+    [_, _, 8, _, _, _, 2, _, 1],
+    [1, _, _, _, _, 2, _, _, _],
+    [_, _, 2, 4, 7, 6, 8, _, _],
+    [6, 8, 9, _, _, _, _, 5, 4],
+    [_, _, _, _, 8, _, _, _, _]].
+
+problem(10, Data) => 
+Data = [
+    [1, 8, 2, 7, 5, _, 3, _, 9],
+    [9, 5, 6, _, 3, _, _, 8, _],
+    [3, 4, 7, _, _, 9, _, 5, _],
+    [2, _, 3, _, 4, _, _, 9, 8],
+    [4, _, 8, 9, _, 2, 5, _, 3],
+    [5, 7, 9, 3, 6, 8, 1, 2, 4],
+    [_, 2, _, 4, 9, _, 8, 3, _],
+    [_, 3, _, _, 2, _, 9, _, 5],
+    [_, 9, _, _, _, 3, _, 1, _]].
+
+/*
+  These are from J:s sudoku.ijs
+*/ 
+% Roger Huis example
+problem(11,Data) => 
+Data = [
+       [2,_,_,6,7,_,_,_,_],
+       [_,_,6,_,_,_,2,_,1],
+       [4,_,_,_,_,_,8,_,_],
+       [5,_,_,_,_,9,3,_,_],
+       [_,3,_,_,_,_,_,5,_],
+       [_,_,2,8,_,_,_,_,7],
+       [_,_,1,_,_,_,_,_,4],
+       [7,_,8,_,_,_,6,_,_],
+       [_,_,_,_,5,3,_,_,8]].
+
+
+% This puzzle is the evil puzzle from
+% Perl's Games::Sudoku examples
+problem(12, Data) => 
+Data = [
+       [_,7,6,4,_,_,5,_,_],
+       [_,_,_,_,_,5,_,_,4],
+       [_,_,_,_,7,_,_,6,9],
+       [5,_,_,_,_,2,_,9,_],
+       [_,3,1,_,_,_,2,5,_],
+       [_,6,_,5,_,_,_,_,1],
+       [6,2,_,_,4,_,_,_,_],
+       [8,_,_,3,_,_,_,_,_],
+       [_,_,5,_,_,7,4,3,_]].
+
+
+
+% From https://groups.google.com/d/topic/comp.lang.prolog/sTSzJMflBDw/discussion
+problem(13, Data) => 
+Data = [
+       [_,_,_,_,_,_,_,1,2],
+       [_,_,_,_,_,_,_,_,3],   
+       [_,_,2,3,_,_,4,_,_],
+       [_,_,1,8,_,_,_,_,5],
+       [_,6,_,_,7,_,8,_,_],
+       [_,_,_,_,_,9,_,_,_],
+       [_,_,8,5,_,_,_,_,_],
+       [9,_,_,_,4,_,5,_,_],
+       [4,7,_,_,_,6,_,_,_]].
+
+% First problem from Project Euler #96:
+% http://projecteuler.net/problem=96
+problem(14,Data) => 
+Data = 
+[
+[_,_,3,_,2,_,6,_,_],
+[9,_,_,3,_,5,_,_,1],
+[_,_,1,8,_,6,4,_,_],
+[_,_,8,1,_,2,9,_,_],
+[7,_,_,_,_,_,_,_,8],
+[_,_,6,7,_,8,2,_,_],
+[_,_,2,6,_,9,5,_,_],
+[8,_,_,2,_,3,_,_,9],
+[_,_,5,_,1,_,3,_,_]
+].
+
+
+% http://blag.nullteilerfrei.de/2014/07/03/why-someone-thought-that-sudoku-might-not-be-boring-while-actually-you-should-learn-how-to-properly-implement-backtracking/
+problem(15, Data) =>
+  Data =
+ [
+  [_, _, _, _, 6, _, _, 8, _],
+  [_, 2, _, _, _, _, _, _, _],
+  [_, _, 1, _, _, _, _, _, _],
+  [_, 7, _, _, _, _, 1, _, 2],
+  [5, _, _, _, 3, _, _, _, _],
+  [_, _, _, _, _, _, 4, _, _],
+  [_, _, 4, 2, _, 1, _, _, _],
+  [3, _, _, 7, _, _, 6, _, _],
+  [_, _, _, _, _, _, _, 5, _] 
+].
