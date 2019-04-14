@@ -10,10 +10,10 @@ grammar Language::Picat::Grammar
   rule TOP
     {
       [
-      <comment>
+      <comment>+
 
-      <comment>
-      <comment>
+#      <comment> # Hey, what's going on here?
+#      <comment>
 
 
 'main => go.'
