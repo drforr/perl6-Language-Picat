@@ -4,17 +4,13 @@ grammar Language::Picat::Grammar
   {
   token comment
     {
-    | '/*' .*? '*/'
-    | '%' .*? $$
+    | '/*' .*? '*/' \s*
+    | '%' .*? $$ \s*
     }
   rule TOP
     {
       [
       <comment>+
-
-#      <comment> # Hey, what's going on here?
-#      <comment>
-
 
 'main => go.'
 
@@ -57,11 +53,7 @@ grammar Language::Picat::Grammar
 
     ||
 
-<comment>
-
-<comment>
-
-<comment>
+<comment>+
 'import bplan.'
 
 'main => go.'
@@ -107,40 +99,11 @@ grammar Language::Picat::Grammar
    nl.'
 
 
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-
-<comment>
-
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-
-<comment>
-<comment>
-<comment>
+<comment>+
 
 'index(-)'
 <comment>
-'initial_state([2,4,1,7,5,3,8,6]).' <comment>
-<comment>
-<comment>
+'initial_state([2,4,1,7,5,3,8,6]).' <comment>+
 
 'table'
 'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
@@ -152,9 +115,7 @@ grammar Language::Picat::Grammar
 'goal_state(Goal) => Goal = [1,2,3,4,5,6,7,8].'
 
 
-<comment>
-<comment>
-<comment>
+<comment>+
 'table'
 'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To,Cost) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
 'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
@@ -163,29 +124,7 @@ grammar Language::Picat::Grammar
 'legal_move([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
 
 
-<comment>
-<comment>
-<comment>
-<comment>
-
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-
-<comment>
-<comment>
-<comment>
-<comment>
-<comment>
-
-<comment>
+<comment>+
 
       ] $
     }
