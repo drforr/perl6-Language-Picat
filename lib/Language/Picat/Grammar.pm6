@@ -2,36 +2,14 @@
 # no precompilation;
 grammar Language::Picat::Grammar
   {
+  token comment
+    {
+    '/*' .*? '*/'
+    }
   rule TOP
     {
       [
-'/* 
-
-  100 doors problem in Picat.
-
-  From Rosetta code:
-  http://rosettacode.org/wiki/100_doors
-  """
-  Problem: 
-  You have 100 doors in a row that are all initially closed. You make 100 passes by 
-  the doors. The first time through, you visit every door and toggle the door 
-  (if the door is closed, you open it; if it is open, you close it). The second time 
-  you only visit every 2nd door (door #2, #4, #6, ...). The third time, every 3rd door 
-  (door #3, #6, #9, ...), etc, until you only visit the 100th door.
-
-  Question: What state are the doors in after the last pass? Which are open, which 
-  are closed? [1]
-
-  Alternate: As noted in this page\'s discussion page, the only doors that remain open are 
-  whose numbers are perfect squares of integers. Opening only those doors is an 
-  optimization that may also be expressed. 
-  """
-
-  This Picat model was created by Hakan Kjellerstrand, hakank@gmail.com
-  See also my Picat page: http://www.hakank.org/picat/
-
-*/'
-
+      <comment>
 
 '% import util.'
 '% import cp.'
@@ -78,102 +56,7 @@ grammar Language::Picat::Grammar
 
     ||
 
-'/*
-
-  1D Rubik\'s Cube in Picat.
-
-  From
-  http://www.mail-archive.com/programming@jsoftware.com/msg05817.html
-  """
-  1D Rubik\'s Cube
-
-  Oleg Kobchenko
-  Mon, 11 Jun 2007 19:09:55 -0700
-
-  I found an interesting game, as found on Andrew Nikitin\'s 
-  MSX-BASIC page http://nsg.upor.net/msx/basic/basic.htm ,
-  and I am not sure if its solver has been given as a puzzle.
-  Here it goes.
-
-  1D Rubik\'s Cube is a line of 6 numbers with
-  original position:
-
-    1 2 3 4 5 6
-
-  which can be rotated in 3 different ways
-  in groups of four:
-      _______                _______
-     (1 2 3 4)5 6  --(0)->  (4 3 2 1)5 6
-        _______                _______
-      1(2 3 4 5)6  --(1)->   1(5 4 3 2)6
-          _______                _______
-      1 2(3 4 5 6) --(2)->   1 2(6 5 4 3)
-
-  Given a scrambled line, return the shortest sequence of 
-  rotations to restore the original position.
-
-  Examples:
-
-     solve 1 3 2 6 5 4
-  1 2 1
-     solve 5 6 2 1 4 3
-  0 2
-     solve 6 5 4 1 2 3
-  0 1 2
-
-  """
-
-
-  Here is a GAP program for this problem.
-  Note: It actually solves the opposite problem:
-  Given a sequence, how to construct it, i.e. the 
-  order of operations are reversed:
-
-  Coding: the three operations (reverse) as cycle notation:
-
-    1 2 3 4 5 6      (1,4)(2,3)
-    4 3 2 1 5 6     
-
-    1 2 3 4 5 6      (2,5)(3,4)
-    1 5 4 3 2 6     
-
-    1 2 3 4 5 6      (3,6)(4,6)
-    1 2 6 5 4 3
-
-    Now the GAP code:
-  
-    gap> g:=Group([(1,4)(2,3), (2,5)(3,4), (3,6)(4,5)]);
-    Group([ (1,4)(2,3), (2,5)(3,4), (3,6)(4,5) ])
-    gap> Order(g);                                      
-    360
-    gap> a:=g.1; b:=g.2; c:=g.3;                        
-    (1,4)(2,3)
-    (2,5)(3,4)
-    (3,6)(4,5)
-    gap> StructureDescription(g);
-    "A6"
-    gap> ListPerm(a);
-    [ 4, 3, 2, 1 ]
-    gap> ListPerm(b);
-    [ 1, 5, 4, 3, 2 ]
-    gap> ListPerm(c);
-    [ 1, 2, 6, 5, 4, 3 ]
-
-    And the three problems:
-    gap> Factorization(g,PermList([1,3,2,6,5,4]));
-    x2*x3*x2
-
-    gap> Factorization(g,PermList([5,6,2,1,4,3]));
-    x1*x3
-
-    gap> Factorization(g,PermList([6,5,4,1,2,3]));
-    x1*x2*x3
-
-
-  Model created by Hakan Kjellerstrand, hakank@gmail.com
-  See also my Picat page: http://www.hakank.org/picat/
-
-*/'
+<comment>
 
 '% import cp.'
 
