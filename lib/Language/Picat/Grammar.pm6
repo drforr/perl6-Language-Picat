@@ -2,6 +2,14 @@
 # no precompilation;
 grammar Language::Picat::Grammar
   {
+  token module-name
+    {
+    \w+
+    }
+  rule import-statement
+    {
+    'import' <module-name> '.'
+    }
   token comment
     {
     | '/*' .*? '*/' \s*
@@ -54,7 +62,7 @@ grammar Language::Picat::Grammar
     ||
 
 <comment>+
-'import bplan.'
+<import-statement>
 
 'main => go.'
 
