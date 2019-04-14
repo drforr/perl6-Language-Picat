@@ -6,6 +6,11 @@ grammar Language::Picat::Grammar
     {
     \w+
     }
+  token function-name
+    {
+    \w+
+    }
+
   rule import-statement
     {
     'import' <module-name> '.'
@@ -20,9 +25,9 @@ grammar Language::Picat::Grammar
       [
       <comment>+
 
-'main => go.'
+<function-name> '=> go.'
 
-'go => 
+<function-name> '=> 
    doors(10),
    doors(100),
    doors_opt(100),
@@ -30,7 +35,7 @@ grammar Language::Picat::Grammar
    nl.'
 
 <comment>
-'doors(N) => 
+<function-name> '(N) => 
    Doors = new_array(N),
    foreach(I in 1..N) Doors[I] := 0 end,
    foreach(I in 1..N)
@@ -45,10 +50,10 @@ grammar Language::Picat::Grammar
    print_open(Doors),
    nl.'
 
-'print_open(Doors) => writeln([I : I in 1..Doors.length, Doors[I] == 1]).'
+<function-name> '(Doors) => writeln([I : I in 1..Doors.length, Doors[I] == 1]).'
   
 <comment>
-'doors_opt(N) =>
+<function-name> '(N) =>
   foreach(I in 1..N)
      Root = sqrt(I),
      writeln([I, cond(Root == 1.0*round(Root), open, closed)])
@@ -56,7 +61,7 @@ grammar Language::Picat::Grammar
   nl.'
 
 <comment>
-'doors_opt2(N) => 
+<function-name> '(N) => 
   writeln([I**2 : I in 1..N, I**2 <= N]).'
 
     ||
@@ -64,17 +69,17 @@ grammar Language::Picat::Grammar
 <comment>+
 <import-statement>
 
-'main => go.'
+<function-name> '=> go.'
 
-'go =>'
+<function-name> '=>'
    <comment>
    'time(bplan(L)),
    write(L), nl,
    Len=length(L),
    write(len=Len),nl.'
 
-'go2 =>
-   foreach(Len in 1..15)
+<function-name> '=>'
+   'foreach(Len in 1..15)
       nl,
       write(len=Len), nl,
       L = new_list(Len),
@@ -83,23 +88,23 @@ grammar Language::Picat::Grammar
       'writeln(all_len=All.length)
    end.'
 
-'go3 => 
-  L = new_list(10),
+<function-name> '=>'
+  'L = new_list(10),
   All=findall(L,$plan(L)),
   writeln(All),
   writeln(len=All.length),
   nl.'
 
-'go4 =>
-   initial_state(Init),
+<function-name> '=>'
+   'initial_state(Init),
    time(plan2(Init,L,Cost)),
    write(L), nl,
    writeln(len=L.length),
    writeln(cost=Cost),
    nl.'
 
-'go5 =>
-   initial_state(Init),
+<function-name> '=>'
+   'initial_state(Init),
    time(plan3(Init,L,Cost,[])),
    write(L), nl,
    writeln(len=L.length),
@@ -118,10 +123,9 @@ grammar Language::Picat::Grammar
 'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
 'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
 'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
-'legal_move([M1,M2,M3,M4,M8,M7,M6,M5],M,To)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
 
-'goal_state(Goal) => Goal = [1,2,3,4,5,6,7,8].'
-
+<function-name> '(Goal) => Goal = [1,2,3,4,5,6,7,8].'
 
 <comment>+
 'table'
@@ -129,8 +133,7 @@ grammar Language::Picat::Grammar
 'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
 'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To,Cost) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
 'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To,Cost) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
-'legal_move([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
-
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
 
 <comment>+
 
