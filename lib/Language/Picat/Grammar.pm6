@@ -20,10 +20,17 @@ grammar Language::Picat::Grammar
     | '/*' .*? '*/' \s*
     | '%' .*? $$ \s*
     }
+
+  rule statement
+    {
+    | <import-statement>
+    | <comment>
+    }
+
   rule TOP
     {
       [
-      <comment>+
+      <statement>+
 
 <function-name> '=>' 'go' '.'
 
@@ -34,7 +41,7 @@ grammar Language::Picat::Grammar
    doors_opt2(100),
    nl' '.'
 
-<comment>
+<statement>
 <function-name> '(N) => 
    Doors = new_array(N),
    foreach(I in 1..N) Doors[I] := 0 end,
@@ -52,7 +59,7 @@ grammar Language::Picat::Grammar
 
 <function-name> '(Doors) => writeln([I : I in 1..Doors.length, Doors[I] == 1])' '.'
   
-<comment>
+<statement>
 <function-name> '(N)' '=>
   foreach(I in 1..N)
      Root = sqrt(I),
@@ -60,19 +67,18 @@ grammar Language::Picat::Grammar
   end,
   nl' '.'
 
-<comment>
+<statement>
 <function-name> '(N)' '=> 
   writeln([I**2 : I in 1..N, I**2 <= N])' '.'
 
     ||
 
-<comment>+
-<import-statement>
+<statement>+
 
 <function-name> '=>' 'go' '.'
 
 <function-name> '=>'
-   <comment>
+   <statement>
    'time(bplan(L)),
    write(L), nl,
    Len=length(L),
@@ -84,7 +90,7 @@ grammar Language::Picat::Grammar
       write(len=Len), nl,
       L = new_list(Len),
       time(All=findall(L, $plan(L))),'
-      <comment>
+      <statement>
       'writeln(all_len=All.length)
    end' '.'
 
@@ -111,30 +117,30 @@ grammar Language::Picat::Grammar
    writeln(cost=Cost),
    nl' '.'
 
-<comment>+
+<statement>+
 
 'index(-)'
-<comment>
-'initial_state([2,4,1,7,5,3,8,6])' '.' <comment>+
+<statement>
+'initial_state([2,4,1,7,5,3,8,6])' '.' <statement>+
 
 'table'
-'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
-'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
-'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
-'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
-<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
+'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
 
 <function-name> '(Goal)' '=>' 'Goal = [1,2,3,4,5,6,7,8]' '.'
 
-<comment>+
+<statement>+
 'table'
-'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To,Cost) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
-'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
-'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To,Cost) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
-'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To,Cost) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
-<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
+'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To,Cost) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
+'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
+'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To,Cost) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
+'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To,Cost) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
 
-<comment>+
+<statement>+
 
       ] $
     }
