@@ -45,14 +45,14 @@ grammar Language::Picat::Grammar
 <function-name> '(N)' '=>'
    'Doors = new_array(N)' ','
    'foreach(I in 1..N)' 'Doors[I] := 0' 'end' ','
-   'foreach(I in 1..N)
-     foreach(J in I..I..N)
-        Doors[J] := 1^Doors[J]
-     end' ','
-     'if N <= 10 then
-        print_open(Doors)
-     end
-   end' ','
+   'foreach(I in 1..N)'
+     'foreach(J in I..I..N)'
+        'Doors[J] := 1^Doors[J]'
+     'end' ','
+     'if N <= 10 then'
+        'print_open(Doors)'
+     'end'
+   'end' ','
    'writeln(Doors)' ','
    'print_open(Doors)' ','
    'nl' '.'
@@ -61,10 +61,10 @@ grammar Language::Picat::Grammar
   
 <statement>
 <function-name> '(N)' '=>'
-  'foreach(I in 1..N)
-     Root = sqrt(I)' ','
-     'writeln([I, cond(Root == 1.0*round(Root), open, closed)])
-  end' ','
+  'foreach(I in 1..N)'
+     'Root = sqrt(I)' ','
+     'writeln([I, cond(Root == 1.0*round(Root), open, closed)])'
+  'end' ','
   'nl' '.'
 
 <statement>
@@ -85,14 +85,14 @@ grammar Language::Picat::Grammar
    'write(len=Len)' ',' 'nl' '.'
 
 <function-name> '=>'
-   'foreach(Len in 1..15)
-      nl' ','
+   'foreach(Len in 1..15)'
+      'nl' ','
       'write(len=Len),' 'nl,'
       'L = new_list(Len)' ','
       'time(All=findall(L, $plan(L)))' ','
       <statement>
-      'writeln(all_len=All.length)
-   end' '.'
+      'writeln(all_len=All.length)'
+   'end' '.'
 
 <function-name> '=>'
   'L = new_list(10)' ','
