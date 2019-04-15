@@ -25,14 +25,14 @@ grammar Language::Picat::Grammar
       [
       <comment>+
 
-<function-name> '=> go.'
+<function-name> '=>' 'go' '.'
 
 <function-name> '=> 
    doors(10),
    doors(100),
    doors_opt(100),
    doors_opt2(100),
-   nl.'
+   nl' '.'
 
 <comment>
 <function-name> '(N) => 
@@ -48,35 +48,35 @@ grammar Language::Picat::Grammar
    end,
    writeln(Doors),
    print_open(Doors),
-   nl.'
+   nl' '.'
 
-<function-name> '(Doors) => writeln([I : I in 1..Doors.length, Doors[I] == 1]).'
+<function-name> '(Doors) => writeln([I : I in 1..Doors.length, Doors[I] == 1])' '.'
   
 <comment>
-<function-name> '(N) =>
+<function-name> '(N)' '=>
   foreach(I in 1..N)
      Root = sqrt(I),
      writeln([I, cond(Root == 1.0*round(Root), open, closed)])
   end,
-  nl.'
+  nl' '.'
 
 <comment>
-<function-name> '(N) => 
-  writeln([I**2 : I in 1..N, I**2 <= N]).'
+<function-name> '(N)' '=> 
+  writeln([I**2 : I in 1..N, I**2 <= N])' '.'
 
     ||
 
 <comment>+
 <import-statement>
 
-<function-name> '=> go.'
+<function-name> '=>' 'go' '.'
 
 <function-name> '=>'
    <comment>
    'time(bplan(L)),
    write(L), nl,
    Len=length(L),
-   write(len=Len),nl.'
+   write(len=Len),nl' '.'
 
 <function-name> '=>'
    'foreach(Len in 1..15)
@@ -86,14 +86,14 @@ grammar Language::Picat::Grammar
       time(All=findall(L, $plan(L))),'
       <comment>
       'writeln(all_len=All.length)
-   end.'
+   end' '.'
 
 <function-name> '=>'
   'L = new_list(10),
   All=findall(L,$plan(L)),
   writeln(All),
   writeln(len=All.length),
-  nl.'
+  nl' '.'
 
 <function-name> '=>'
    'initial_state(Init),
@@ -101,7 +101,7 @@ grammar Language::Picat::Grammar
    write(L), nl,
    writeln(len=L.length),
    writeln(cost=Cost),
-   nl.'
+   nl' '.'
 
 <function-name> '=>'
    'initial_state(Init),
@@ -109,31 +109,30 @@ grammar Language::Picat::Grammar
    write(L), nl,
    writeln(len=L.length),
    writeln(cost=Cost),
-   nl.'
-
+   nl' '.'
 
 <comment>+
 
 'index(-)'
 <comment>
-'initial_state([2,4,1,7,5,3,8,6]).' <comment>+
+'initial_state([2,4,1,7,5,3,8,6])' '.' <comment>+
 
 'table'
-'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
-'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
-'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
-'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
-<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8].' <comment>
+'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
+'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
+'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
+'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <comment>
 
-<function-name> '(Goal) => Goal = [1,2,3,4,5,6,7,8].'
+<function-name> '(Goal)' '=>' 'Goal = [1,2,3,4,5,6,7,8]' '.'
 
 <comment>+
 'table'
-'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To,Cost) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
-'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
-'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To,Cost) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
-'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To,Cost) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
-<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1.' <comment>
+'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To,Cost) ?=> M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
+'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost) ?=> M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
+'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To,Cost) ?=> M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
+'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To,Cost) ?=> M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)  => M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <comment>
 
 <comment>+
 
