@@ -11,7 +11,7 @@ grammar Language::Picat::Grammar
     \w+
     }
 
-  rule import-statement
+  rule import-declaration
     {
     'import' <module-name> '.'
     }
@@ -28,7 +28,6 @@ grammar Language::Picat::Grammar
 
   rule statement
     {
-    | <import-statement>
     | <comment>
     }
 
@@ -78,10 +77,10 @@ grammar Language::Picat::Grammar
 
     ||
 
-<statement>+
+<comment>+
+<import-declaration>
 
 <function-definition>
-#<function-name> '=>' 'go' '.'
 
 <function-name> '=>'
    <statement>
