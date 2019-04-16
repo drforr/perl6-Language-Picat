@@ -23,7 +23,9 @@ grammar Language::Picat::Grammar
 
   rule function-definition
     {
-    <function-name> '=>' 'go' '.' # This will change radically later.
+    <function-name> '=>'
+      <statement>
+    '.'
     }
 
   rule statement
