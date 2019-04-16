@@ -28,9 +28,14 @@ grammar Language::Picat::Grammar
     '.'
     }
 
-  rule statement
+  rule function-call
     {
     | <function-name>
+    }
+
+  rule statement
+    {
+    | <function-call>
     | <comment>
     }
 
