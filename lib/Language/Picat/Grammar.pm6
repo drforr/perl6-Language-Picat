@@ -40,7 +40,7 @@ grammar Language::Picat::Grammar
 
   rule function-call
     {
-    | <function-name> '(' <argument> ')'
+    | <function-name> '(' <argument>+ %% ',' ')'
     | <function-name>
     }
 
@@ -92,7 +92,7 @@ grammar Language::Picat::Grammar
 <function-call> '=>'
   'foreach(I in 1..N)'
      <statement> ','
-     'writeln([I, cond(' <variable-name> '== 1.0*round(Root), open, closed)])'
+     'writeln([I, cond(' <variable-name> '== 1.0*' <function-call> ', open, closed)])'
   'end' ','
   <statement> '.'
 
@@ -131,7 +131,7 @@ grammar Language::Picat::Grammar
 
 <function-name> '=>'
    <statement> ','
-   'time(plan2(Init,L,Cost))' ','
+   'time(' <function-call> ')' ','
    <statement> ',' <statement> ','
    'writeln(' <variable-name> '=' 'L.length)' ','
    'writeln(' <variable-name> '=' 'Cost)' ','
