@@ -24,7 +24,7 @@ grammar Language::Picat::Grammar
   rule function-definition
     {
     <function-name> '=>'
-      <statement>
+      <statement>+ %% ','
     '.'
     }
 
@@ -58,12 +58,7 @@ grammar Language::Picat::Grammar
 
 <function-definition>
 
-<function-name> '=>'
-   <statement> ','
-   <statement> ','
-   <statement> ','
-   <statement> ','
-   <statement> '.'
+<function-definition>
 
 <statement>
 <function-call> '=>'
