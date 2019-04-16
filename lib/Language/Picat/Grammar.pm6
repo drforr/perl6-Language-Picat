@@ -85,9 +85,6 @@ grammar Language::Picat::Grammar
 
     ||
 
-<comment>+
-<import-declaration>
-
 <function-definition>
 
 <function-name> '=>'
