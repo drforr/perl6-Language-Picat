@@ -28,9 +28,10 @@ grammar Language::Picat::Grammar
     '.'
     }
 
-  token argument
+  rule argument
     {
-    \d+
+    | \w+
+    | \d+
     }
 
   rule function-call
@@ -65,33 +66,33 @@ grammar Language::Picat::Grammar
    <statement> '.'
 
 <statement>
-<function-name> '(N)' '=>'
-   'Doors = new_array(N)' ','
+<function-call> '=>'
+   'Doors =' <function-call> ','
    'foreach(I in 1..N)' 'Doors[I] := 0' 'end' ','
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
         'Doors[J] := 1^Doors[J]'
      'end' ','
      'if N <= 10 then'
-        'print_open(Doors)'
+        <statement>
      'end'
    'end' ','
-   'writeln(Doors)' ','
-   'print_open(Doors)' ','
+   <statement> ','
+   <statement> ','
    <statement> '.'
 
-<function-name> '(Doors) => writeln([I : I in 1..Doors.length, Doors[I] == 1])' '.'
+<function-call> '=>' 'writeln([I : I in 1..Doors.length, Doors[I] == 1])' '.'
   
 <statement>
-<function-name> '(N)' '=>'
+<function-call> '=>'
   'foreach(I in 1..N)'
-     'Root = sqrt(I)' ','
+     'Root =' <function-call> ','
      'writeln([I, cond(Root == 1.0*round(Root), open, closed)])'
   'end' ','
   <statement> '.'
 
 <statement>
-<function-name> '(N)' '=>'
+<function-call> '=>'
   'writeln([I**2 : I in 1..N, I**2 <= N])' '.'
 
     ||
@@ -100,16 +101,16 @@ grammar Language::Picat::Grammar
 
 <function-name> '=>'
    <statement>
-   'time(bplan(L))' ','
-   'write(L)' ',' <statement> ','
-   'Len=length(L)' ','
+   'time(' <function-call> ')' ','
+   <statement> ',' <statement> ','
+   'Len=' <function-call> ','
    'write(len=Len)' ',' <statement> '.'
 
 <function-name> '=>'
    'foreach(Len in 1..15)'
       <statement> ','
       'write(len=Len),' <statement> ','
-      'L = new_list(Len)' ','
+      'L =' <function-call> ','
       'time(All=findall(L, $plan(L)))' ','
       <statement>
       'writeln(all_len=All.length)'
@@ -118,22 +119,22 @@ grammar Language::Picat::Grammar
 <function-name> '=>'
   'L =' <function-call> ','
   'All=findall(L,$plan(L))' ','
-  'writeln(All)' ','
+  <statement> ','
   'writeln(len=All.length)' ','
   <statement> '.'
 
 <function-name> '=>'
-   'initial_state(Init)' ','
+   <statement> ','
    'time(plan2(Init,L,Cost))' ','
-   'write(L)' ',' <statement> ','
+   <statement> ',' <statement> ','
    'writeln(len=L.length)' ','
    'writeln(cost=Cost)' ','
    <statement> '.'
 
 <function-name> '=>'
-   'initial_state(Init)' ','
+   <statement> ','
    'time(plan3(Init,L,Cost,[]))' ','
-   'write(L)' ',' <statement> ','
+   <statement> ',' <statement> ','
    'writeln(len=L.length)' ','
    'writeln(cost=Cost)' ','
    <statement> '.'
@@ -151,7 +152,7 @@ grammar Language::Picat::Grammar
 'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To)' '?=>' 'M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
 <function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)' '=>' 'M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
 
-<function-name> '(Goal)' '=>' 'Goal = [1,2,3,4,5,6,7,8]' '.'
+<function-call> '=>' 'Goal = [1,2,3,4,5,6,7,8]' '.'
 
 <statement>+
 'table'
