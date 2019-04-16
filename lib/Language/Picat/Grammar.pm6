@@ -33,6 +33,7 @@ grammar Language::Picat::Grammar
 
   rule TOP
     {
+    ^
       [
       <statement>+
 
