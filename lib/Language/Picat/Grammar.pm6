@@ -10,6 +10,10 @@ grammar Language::Picat::Grammar
     {
     \w+
     }
+  token variable-name
+    {
+    \w+
+    }
 
   rule import-declaration
     {
@@ -62,7 +66,7 @@ grammar Language::Picat::Grammar
 
 <statement>
 <function-call> '=>'
-   'Doors =' <function-call> ','
+   <variable-name> '=' <function-call> ','
    'foreach(I in 1..N)' 'Doors[I] := 0' 'end' ','
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
@@ -81,8 +85,8 @@ grammar Language::Picat::Grammar
 <statement>
 <function-call> '=>'
   'foreach(I in 1..N)'
-     'Root =' <function-call> ','
-     'writeln([I, cond(Root == 1.0*round(Root), open, closed)])'
+     <variable-name> '=' <function-call> ','
+     'writeln([I, cond(' <variable-name> '== 1.0*round(Root), open, closed)])'
   'end' ','
   <statement> '.'
 
@@ -98,40 +102,40 @@ grammar Language::Picat::Grammar
    <statement>
    'time(' <function-call> ')' ','
    <statement> ',' <statement> ','
-   'Len=' <function-call> ','
-   'write(len=Len)' ',' <statement> '.'
+   <variable-name> '=' <function-call> ','
+   'write(' <variable-name> '=Len)' ',' <statement> '.'
 
 <function-name> '=>'
    'foreach(Len in 1..15)'
       <statement> ','
-      'write(len=Len),' <statement> ','
-      'L =' <function-call> ','
-      'time(All=findall(L, $plan(L)))' ','
+      'write(' <variable-name> '=Len),' <statement> ','
+      <variable-name> '=' <function-call> ','
+      'time(' <variable-name> '=findall(L, $plan(L)))' ','
       <statement>
-      'writeln(all_len=All.length)'
+      'writeln(' <variable-name> '=All.length)'
    'end' '.'
 
 <function-name> '=>'
-  'L =' <function-call> ','
-  'All=findall(L,$plan(L))' ','
+  <variable-name> '=' <function-call> ','
+  <variable-name> '=findall(L,$plan(L))' ','
   <statement> ','
-  'writeln(len=All.length)' ','
+  'writeln(' <variable-name> '=All.length)' ','
   <statement> '.'
 
 <function-name> '=>'
    <statement> ','
    'time(plan2(Init,L,Cost))' ','
    <statement> ',' <statement> ','
-   'writeln(len=L.length)' ','
-   'writeln(cost=Cost)' ','
+   'writeln(' <variable-name> '=L.length)' ','
+   'writeln(' <variable-name> '=Cost)' ','
    <statement> '.'
 
 <function-name> '=>'
    <statement> ','
    'time(plan3(Init,L,Cost,[]))' ','
    <statement> ',' <statement> ','
-   'writeln(len=L.length)' ','
-   'writeln(cost=Cost)' ','
+   'writeln(' <variable-name> '=L.length)' ','
+   'writeln(' <variable-name> '=Cost)' ','
    <statement> '.'
 
 <statement>+
@@ -141,21 +145,21 @@ grammar Language::Picat::Grammar
 'initial_state([2,4,1,7,5,3,8,6])' '.' <statement>+
 
 'table'
-'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To)' '?=>' 'M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
-'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To)' '?=>' 'M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
-'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To)' '?=>' 'M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
-'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To)' '?=>' 'M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
-<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)' '=>' 'M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To)' '?=>' <variable-name> '=1,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To)' '?=>' <variable-name> '=2,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To)' '?=>' <variable-name> '=3,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To)' '?=>' <variable-name> '=4,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)' '=>' <variable-name> '=5,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
 
-<function-call> '=>' 'Goal = [1,2,3,4,5,6,7,8]' '.'
+<function-call> '=>' <variable-name> '= [1,2,3,4,5,6,7,8]' '.'
 
 <statement>+
 'table'
-'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To,Cost)' '?=>' 'M=1,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
-'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost)' '?=>' 'M=2,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
-'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To,Cost)' '?=>' 'M=3,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
-'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To,Cost)' '?=>' 'M=4,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
-<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)' '=>' 'M=5,To=[M1,M2,M3,M4,M5,M6,M7,M8],Cost=1' '.' <statement>
+'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To,Cost)' '?=>' <variable-name> '=1,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=1' '.' <statement>
+'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost)' '?=>' <variable-name> '=2,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=1' '.' <statement>
+'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To,Cost)' '?=>' <variable-name> '=3,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=1' '.' <statement>
+'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To,Cost)' '?=>' <variable-name> '=4,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=1' '.' <statement>
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)' '=>' <variable-name> '=5,' <variable-name> '=[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=1' '.' <statement>
 
 <statement>+
 
