@@ -51,6 +51,7 @@ grammar Language::Picat::Grammar
 
   rule statement
     {
+    | <assignment-statement>
     | <function-call>
     | <comment>
     }
@@ -71,7 +72,7 @@ grammar Language::Picat::Grammar
 
 <statement>
 <function-call> '=>'
-   <assignment-statement> ','
+   <statement> ','
    'foreach(I in 1..N)' 'Doors[I] := 0' 'end' ','
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
@@ -90,7 +91,7 @@ grammar Language::Picat::Grammar
 <statement>
 <function-call> '=>'
   'foreach(I in 1..N)'
-     <assignment-statement> ','
+     <statement> ','
      'writeln([I, cond(' <variable-name> '== 1.0*round(Root), open, closed)])'
   'end' ','
   <statement> '.'
@@ -107,21 +108,21 @@ grammar Language::Picat::Grammar
    <statement>
    'time(' <function-call> ')' ','
    <statement> ',' <statement> ','
-   <assignment-statement> ','
+   <statement> ','
    'write(' <variable-name> '=Len)' ',' <statement> '.'
 
 <function-name> '=>'
    'foreach(Len in 1..15)'
       <statement> ','
       'write(' <variable-name> '=Len),' <statement> ','
-      <assignment-statement> ','
+      <statement> ','
       'time(' <variable-name> '=findall(L, $plan(L)))' ','
       <statement>
       'writeln(' <variable-name> '=All.length)'
    'end' '.'
 
 <function-name> '=>'
-  <assignment-statement> ','
+  <statement> ','
   <variable-name> '=findall(L,$plan(L))' ','
   <statement> ','
   'writeln(' <variable-name> '=All.length)' ','
