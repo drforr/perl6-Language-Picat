@@ -28,9 +28,14 @@ grammar Language::Picat::Grammar
     '.'
     }
 
+  token argument
+    {
+    \d+
+    }
+
   rule function-call
     {
-    | <function-name> '(' \d+ ')' # We'll refactor this later, watch this space
+    | <function-name> '(' <argument> ')'
     | <function-name>
     }
 
