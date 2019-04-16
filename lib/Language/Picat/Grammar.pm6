@@ -30,6 +30,7 @@ grammar Language::Picat::Grammar
 
   rule function-call
     {
+    | <function-name> '(' \d+ ')' # We'll refactor this later, watch this space
     | <function-name>
     }
 
@@ -52,10 +53,10 @@ grammar Language::Picat::Grammar
 <function-definition>
 
 <function-name> '=>'
-   'doors(10)' ','
-   'doors(100)' ','
-   'doors_opt(100)' ','
-   'doors_opt2(100)' ','
+   <statement> ','
+   <statement> ','
+   <statement> ','
+   <statement> ','
    <statement> '.'
 
 <statement>
@@ -110,7 +111,7 @@ grammar Language::Picat::Grammar
    'end' '.'
 
 <function-name> '=>'
-  'L = new_list(10)' ','
+  'L =' <function-call> ','
   'All=findall(L,$plan(L))' ','
   'writeln(All)' ','
   'writeln(len=All.length)' ','
