@@ -21,6 +21,11 @@ grammar Language::Picat::Grammar
     | '%' .*? $$ \s*
     }
 
+  rule function-definition
+    {
+    <function-name> '=>' 'go' '.' # This will change radically later.
+    }
+
   rule statement
     {
     | <import-statement>
@@ -75,7 +80,8 @@ grammar Language::Picat::Grammar
 
 <statement>+
 
-<function-name> '=>' 'go' '.'
+<function-definition>
+#<function-name> '=>' 'go' '.'
 
 <function-name> '=>'
    <statement>
