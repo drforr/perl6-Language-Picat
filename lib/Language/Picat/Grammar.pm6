@@ -28,6 +28,7 @@ grammar Language::Picat::Grammar
 
   rule statement
     {
+    | <function-name>
     | <comment>
     }
 
@@ -41,14 +42,14 @@ grammar Language::Picat::Grammar
       [
       <statement>+
 
-<function-name> '=>' 'go' '.'
+<function-definition>
 
 <function-name> '=>'
    'doors(10)' ','
    'doors(100)' ','
    'doors_opt(100)' ','
    'doors_opt2(100)' ','
-   'nl' '.'
+   <statement> '.'
 
 <statement>
 <function-name> '(N)' '=>'
@@ -64,7 +65,7 @@ grammar Language::Picat::Grammar
    'end' ','
    'writeln(Doors)' ','
    'print_open(Doors)' ','
-   'nl' '.'
+   <statement> '.'
 
 <function-name> '(Doors) => writeln([I : I in 1..Doors.length, Doors[I] == 1])' '.'
   
@@ -74,7 +75,7 @@ grammar Language::Picat::Grammar
      'Root = sqrt(I)' ','
      'writeln([I, cond(Root == 1.0*round(Root), open, closed)])'
   'end' ','
-  'nl' '.'
+  <statement> '.'
 
 <statement>
 <function-name> '(N)' '=>'
@@ -90,14 +91,14 @@ grammar Language::Picat::Grammar
 <function-name> '=>'
    <statement>
    'time(bplan(L))' ','
-   'write(L)' ',' 'nl' ','
+   'write(L)' ',' <statement> ','
    'Len=length(L)' ','
-   'write(len=Len)' ',' 'nl' '.'
+   'write(len=Len)' ',' <statement> '.'
 
 <function-name> '=>'
    'foreach(Len in 1..15)'
-      'nl' ','
-      'write(len=Len),' 'nl,'
+      <statement> ','
+      'write(len=Len),' <statement> ','
       'L = new_list(Len)' ','
       'time(All=findall(L, $plan(L)))' ','
       <statement>
@@ -109,23 +110,23 @@ grammar Language::Picat::Grammar
   'All=findall(L,$plan(L))' ','
   'writeln(All)' ','
   'writeln(len=All.length)' ','
-  'nl' '.'
+  <statement> '.'
 
 <function-name> '=>'
    'initial_state(Init)' ','
    'time(plan2(Init,L,Cost))' ','
-   'write(L)' ',' 'nl' ','
+   'write(L)' ',' <statement> ','
    'writeln(len=L.length)' ','
    'writeln(cost=Cost)' ','
-   'nl' '.'
+   <statement> '.'
 
 <function-name> '=>'
    'initial_state(Init)' ','
    'time(plan3(Init,L,Cost,[]))' ','
-   'write(L)' ',' 'nl' ','
+   'write(L)' ',' <statement> ','
    'writeln(len=L.length)' ','
    'writeln(cost=Cost)' ','
-   'nl' '.'
+   <statement> '.'
 
 <statement>+
 
