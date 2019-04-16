@@ -33,7 +33,11 @@ grammar Language::Picat::Grammar
 
   rule TOP
     {
-    ^
+    ^ <comment>* <import-declaration>? <program-body> $
+    }
+
+  rule program-body
+    {
       [
       <statement>+
 
@@ -148,6 +152,6 @@ grammar Language::Picat::Grammar
 
 <statement>+
 
-      ] $
+      ]
     }
   }
