@@ -68,14 +68,16 @@ grammar Language::Picat::Grammar
 
   rule thingie
     {
-    | <expression> <comment> <comma> <comment>* # 0 1 1 1 1
-    | <expression> <comment>         <comment>* # 0 1 1 0 1
-    | <expression>           <comma> <comment>* # 0 1 0 1 1
-    | <expression>                   <comment>* # 0 1 0 0 1
-    |              <comment> <comma> <comment>* # 0 0 1 1 1
-    |              <comment>         <comment>* # 0 0 1 0 1
-    |                        <comma> <comment>* # 0 0 0 1 1
-    |                                <comment>* # 0 0 0 0 1
+      [
+      | <expression> <comment> <comma> # 0 1 1 1
+      | <expression> <comment>         # 0 1 1 0
+      | <expression>           <comma> # 0 1 0 1
+      | <expression>                   # 0 1 0 0
+      |              <comment> <comma> # 0 0 1 1
+      |              <comment>         # 0 0 1 0
+      |                        <comma> # 0 0 0 1
+      ]
+      <comment>*
     }
 
   rule TOP
