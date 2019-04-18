@@ -69,11 +69,11 @@ grammar Language::Picat::Grammar
   rule thingie
     {
       [
-      | <expression> <comment> <comma>? # 0 1 1 1
-      | <expression>           <comma>? # 0 1 0 1
-      |              <comment> <comma>? # 0 0 1 1
-      |                        <comma>? # 0 0 0 1
+      | <expression> <comment> # 0 1 1
+      | <expression>           # 0 1 0
+      |              <comment> # 0 0 1
       ]
+      <comma>?
       <comment>*
     }
 
