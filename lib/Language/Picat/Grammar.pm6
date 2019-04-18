@@ -66,6 +66,16 @@ grammar Language::Picat::Grammar
     | <function-call>
     }
 
+  rule thingie
+    {
+    | <comment>
+    | <comment> <expression> <comma> <comment>
+    | <comment> <expression> <comma>
+    |           <expression> <comma> <comment>
+    |           <expression> <comma>
+    |           <expression>
+    }  
+
   rule TOP
     {
     ^ <comment>* <import-declaration>? <program-body> $
@@ -82,19 +92,19 @@ grammar Language::Picat::Grammar
 
 <comment>
 <function-call> '=>'
-   <expression> <comma>
+   <thingie>
    'foreach(I in 1..N)' 'Doors[I] := 0' 'end' <comma>
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
         'Doors[J] := 1^Doors[J]'
      'end' <comma>
      'if N <= 10 then'
-        <expression>
+       <thingie>
      'end'
    'end' <comma>
-   <expression> <comma>
-   <expression> <comma>
-   <expression>
+   <thingie>
+   <thingie>
+   <thingie>
 <period>
 
 <function-call> '=>'
@@ -104,10 +114,10 @@ grammar Language::Picat::Grammar
 <comment>
 <function-call> '=>'
   'foreach(I in 1..N)'
-     <expression> <comma>
+     <thingie>
      'writeln([I, cond(' <variable-name> '== 1.0*' <function-call> ', open, closed)])'
   'end' <comma>
-  <expression>
+  <thingie>
 <period>
 
 <comment>
@@ -120,53 +130,53 @@ grammar Language::Picat::Grammar
 <function-definition>
 
 <function-name> '=>'
-   <comment>
-   <expression> <comma>
-   <expression> <comma>
-   <expression> <comma>
-   <expression> <comma>
+   <thingie>
+   <thingie>
+   <thingie>
+   <thingie>
+   <thingie>
    'write(' <expression> ')' <comma>
-   <expression>
+   <thingie>
 <period>
 
 <function-name> '=>'
    'foreach(Len in 1..15)'
-      <expression> <comma>
+      <thingie>
       'write(' <expression> ')' <comma>
-      <expression> <comma>
-      <expression> <comma>
+      <thingie>
+      <thingie>
       'time(' <variable-name> '=' 'findall(L, $plan(L)))' <comma>
-      <comment>
+      <thingie>
       'writeln(' <variable-name> '=' 'All.length'')'
    'end'
 <period>
 
 <function-name> '=>'
-  <expression> <comma>
+  <thingie>
   <variable-name> '=' 'findall(L,$plan(L))' <comma>
-  <expression> <comma>
+  <thingie>
   'writeln(' <variable-name> '=' 'All.length' ')' <comma>
-  <expression>
+  <thingie>
 <period>
 
 <function-name> '=>'
-   <expression> <comma>
+   <thingie>
    'time(' <function-call> ')' <comma>
-   <expression> <comma>
-   <expression> <comma>
+   <thingie>
+   <thingie>
    'writeln(' <variable-name> '=' 'L.length' ')' <comma>
    'writeln(' <expression> ')' <comma>
-   <expression>
+   <thingie>
 <period>
 
 <function-name> '=>'
-   <expression> <comma>
+   <thingie>
    'time(plan3(Init,L,Cost,[]))' <comma>
-   <expression> <comma>
-   <expression> <comma>
+   <thingie>
+   <thingie>
    'writeln(' <variable-name> '=' 'L.length' ')' <comma>
    'writeln(' <expression> ')' <comma>
-   <expression>
+   <thingie>
 <period>
 
 <comment>+
@@ -178,27 +188,27 @@ grammar Language::Picat::Grammar
 
 'table'
 'legal_move(' <array> ',M,To)' '?=>'
-   <expression> <comma>
+   <thingie>
    <variable-name> '=' <array>
 <period>
 <comment>
 'legal_move(' <array> ',M,To)' '?=>'
-   <expression> <comma>
+   <thingie>
    <variable-name> '=' <array>
 <period>
 <comment>
 'legal_move(' <array> ',M,To)' '?=>'
-  <expression> <comma>
+   <thingie>
   <variable-name> '=' <array>
 <period>
 <comment>
 'legal_move(' <array> ',M,To)' '?=>'
-   <expression> <comma>
+   <thingie>
    <variable-name> '=' <array>
 <period>
 <comment>
 <function-name> '(' <array> ',M,To)' '=>'
-  <expression> <comma>
+  <thingie>
   <variable-name> '=' <array>
 <period>
 <comment>
@@ -210,33 +220,33 @@ grammar Language::Picat::Grammar
 <comment>+
 'table'
 'legal_move(' <array> ',M,To,Cost)' '?=>'
-  <expression> <comma>
+  <thingie>
+  <variable-name> '=' <array> <comma>
+  <thingie>
+<period>
+<comment>
+'legal_move(' <array> ',M,To,Cost)' '?=>'
+  <thingie>
   <variable-name> '=' <array> <comma>
   <expression>
 <period>
 <comment>
 'legal_move(' <array> ',M,To,Cost)' '?=>'
-  <expression> <comma>
+  <thingie>
   <variable-name> '=' <array> <comma>
-  <expression>
+  <thingie>
 <period>
 <comment>
 'legal_move(' <array> ',M,To,Cost)' '?=>'
-  <expression> <comma>
+  <thingie>
   <variable-name> '=' <array> <comma>
-  <expression>
-<period>
-<comment>
-'legal_move(' <array> ',M,To,Cost)' '?=>'
-  <expression> <comma>
-  <variable-name> '=' <array> <comma>
-  <expression>
+  <thingie>
 <period>
 <comment>
 <function-name> '(' <array> ',M,To,Cost)' '=>'
-  <expression> <comma>
+  <thingie>
   <variable-name> '=' <array> <comma>
-  <expression>
+  <thingie>
 <period>
 <comment>+
 
