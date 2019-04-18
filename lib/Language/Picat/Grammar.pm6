@@ -44,14 +44,14 @@ grammar Language::Picat::Grammar
     | <function-name>
     }
 
-  rule assignment-statement
+  rule assignment-expression
     {
     <variable-name> '=' <function-call>
     }
 
   rule statement
     {
-    | <assignment-statement>
+    | <assignment-expression>
     | <function-call>
     | <comment>
     }
