@@ -59,7 +59,7 @@ grammar Language::Picat::Grammar
 
   rule assignment-expression
     {
-    <variable-name> '=' <function-call>
+    <variable-name> '=' <argument>
     }
 
   rule expression
@@ -191,63 +191,63 @@ grammar Language::Picat::Grammar
 'table'
 <function-call> '?=>'
    <thingie>
-   <variable-name> '=' <array>
+   <thingie>
 <period>
 <comment>
 <function-call> '?=>'
    <thingie>
-   <variable-name> '=' <array>
+   <thingie>
 <period>
 <comment>
 <function-call> '?=>'
    <thingie>
-  <variable-name> '=' <array>
+   <thingie>
 <period>
 <comment>
 <function-call> '?=>'
    <thingie>
-   <variable-name> '=' <array>
+   <thingie>
 <period>
 <comment>
 <function-call> '=>'
-  <thingie>
-  <variable-name> '=' <array>
+   <thingie>
+   <thingie>
 <period>
 <comment>
 
 <function-call> '=>'
-  <variable-name> '=' <array>
+   <thingie>
 <period>
 
 <comment>+
 'table'
 <function-call> '?=>'
   <thingie>
-  <variable-name> '=' <array> <comma>
+  <thingie>
   <thingie>
 <period>
 <comment>
 <function-call> '?=>'
   <thingie>
-  <variable-name> '=' <array> <comma>
-  <expression>
-<period>
-<comment>
-<function-call> '?=>'
   <thingie>
-  <variable-name> '=' <array> <comma>
   <thingie>
 <period>
 <comment>
 <function-call> '?=>'
   <thingie>
-  <variable-name> '=' <array> <comma>
+  <thingie>
+  <thingie>
+<period>
+<comment>
+<function-call> '?=>'
+  <thingie>
+  <thingie>
   <thingie>
 <period>
 <comment>
 <function-call> '=>'
   <thingie>
-  <variable-name> '=' <array> <comma>
+  <thingie>
   <thingie>
 <period>
 <comment>+
