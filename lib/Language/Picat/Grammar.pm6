@@ -2,6 +2,9 @@
 # no precompilation;
 grammar Language::Picat::Grammar
   {
+  token period { '.' }
+  token comma { ',' }
+
   token module-name
     {
     \w+
@@ -17,7 +20,7 @@ grammar Language::Picat::Grammar
 
   rule import-declaration
     {
-    'import' <module-name> '.'
+    'import' <module-name> <period>
     }
   token comment
     {
@@ -29,7 +32,7 @@ grammar Language::Picat::Grammar
     {
     <function-name> '=>'
       <statement>+ %% ','
-    '.'
+    <period>
     }
 
   rule array
@@ -93,11 +96,11 @@ grammar Language::Picat::Grammar
    <statement> ','
    <statement> ','
    <statement>
-'.'
+<period>
 
 <function-call> '=>'
    'writeln([I : I in 1..Doors.length, Doors[I] == 1])'
-'.'
+<period>
   
 <comment>
 <function-call> '=>'
@@ -106,12 +109,12 @@ grammar Language::Picat::Grammar
      'writeln([I, cond(' <variable-name> '== 1.0*' <function-call> ', open, closed)])'
   'end' ','
   <statement>
-'.'
+<period>
 
 <comment>
 <function-call> '=>'
   'writeln([I**2 : I in 1..N, I**2 <= N])'
-'.'
+<period>
 
     ||
 
@@ -125,7 +128,7 @@ grammar Language::Picat::Grammar
    <statement> ','
    'write(' <statement> ')' ','
    <statement>
-'.'
+<period>
 
 <function-name> '=>'
    'foreach(Len in 1..15)'
@@ -137,7 +140,7 @@ grammar Language::Picat::Grammar
       <statement>
       'writeln(' <variable-name> '=' 'All.length'')'
    'end'
-'.'
+<period>
 
 <function-name> '=>'
   <statement> ','
@@ -145,7 +148,7 @@ grammar Language::Picat::Grammar
   <statement> ','
   'writeln(' <variable-name> '=' 'All.length' ')' ','
   <statement>
-'.'
+<period>
 
 <function-name> '=>'
    <statement> ','
@@ -155,7 +158,7 @@ grammar Language::Picat::Grammar
    'writeln(' <variable-name> '=' 'L.length' ')' ','
    'writeln(' <statement> ')' ','
    <statement>
-'.'
+<period>
 
 <function-name> '=>'
    <statement> ','
@@ -165,45 +168,45 @@ grammar Language::Picat::Grammar
    'writeln(' <variable-name> '=' 'L.length' ')' ','
    'writeln(' <statement> ')' ','
    <statement>
-'.'
+<period>
 
 <statement>+
 
 'index(-)'
 <statement>
-'initial_state(' <array> ')' '.'
+'initial_state(' <array> ')' <period>
 <statement>+
 
 'table'
 'legal_move(' <array> ',M,To)' '?=>'
    <statement> ','
    <variable-name> '=' <array>
-'.'
+<period>
 <comment>
 'legal_move(' <array> ',M,To)' '?=>'
    <statement> ','
    <variable-name> '=' <array>
-'.'
+<period>
 <comment>
 'legal_move(' <array> ',M,To)' '?=>'
   <statement> ','
   <variable-name> '=' <array>
-'.'
+<period>
 <comment>
 'legal_move(' <array> ',M,To)' '?=>'
    <statement> ','
    <variable-name> '=' <array>
-'.'
+<period>
 <comment>
 <function-name> '(' <array> ',M,To)' '=>'
   <statement> ','
   <variable-name> '=' <array>
-'.'
+<period>
 <comment>
 
 <function-call> '=>'
   <variable-name> '=' <array>
-'.'
+<period>
 
 <comment>+
 'table'
@@ -211,31 +214,31 @@ grammar Language::Picat::Grammar
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
-'.'
+<period>
 <comment>
 'legal_move(' <array> ',M,To,Cost)' '?=>'
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
-'.'
+<period>
 <comment>
 'legal_move(' <array> ',M,To,Cost)' '?=>'
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
-'.'
+<period>
 <comment>
 'legal_move(' <array> ',M,To,Cost)' '?=>'
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
-'.'
+<period>
 <comment>
 <function-name> '(' <array> ',M,To,Cost)' '=>'
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
-'.'
+<period>
 <comment>+
 
       ]
