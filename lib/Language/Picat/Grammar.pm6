@@ -68,38 +68,21 @@ grammar Language::Picat::Grammar
 
   rule thingie
     {
-    | <comment> <expression> <comment> <comma> <comment> # 1 1 1 1 1
-    | <comment> <expression> <comment> <comma>           # 1 1 1 1 0
-    | <comment> <expression> <comment>         <comment> # 1 1 1 0 1
-    | <comment> <expression> <comment>                   # 1 1 1 0 0
-    | <comment> <expression>           <comma> <comment> # 1 1 0 1 1
-    | <comment> <expression>           <comma>           # 1 1 0 1 0
-    | <comment> <expression>                   <comment> # 1 1 0 0 1
-    | <comment> <expression>                             # 1 1 0 0 0
-    | <comment>              <comment> <comma> <comment> # 1 0 1 1 1
-    | <comment>              <comment> <comma>           # 1 0 1 1 0
-    | <comment>              <comment>         <comment> # 1 0 1 0 1
-    | <comment>              <comment>                   # 1 0 1 0 0
-    | <comment>                        <comma> <comment> # 1 0 0 1 1
-    | <comment>                        <comma>           # 1 0 0 1 0
-    | <comment>                                <comment> # 1 0 0 0 1
-    | <comment>                                          # 1 0 0 0 0
-    |           <expression> <comment> <comma> <comment> # 0 1 1 1 1
-    |           <expression> <comment> <comma>           # 0 1 1 1 0
-    |           <expression> <comment>         <comment> # 0 1 1 0 1
-    |           <expression> <comment>                   # 0 1 1 0 0
-    |           <expression>           <comma> <comment> # 0 1 0 1 1
-    |           <expression>           <comma>           # 0 1 0 1 0
-    |           <expression>                   <comment> # 0 1 0 0 1
-    |           <expression>                             # 0 1 0 0 0
-    |                        <comment> <comma> <comment> # 0 0 1 1 1
-    |                        <comment> <comma>           # 0 0 1 1 0
-    |                        <comment>         <comment> # 0 0 1 0 1
-    |                        <comment>                   # 0 0 1 0 0
-    |                                  <comma> <comment> # 0 0 0 1 1
-    |                                  <comma>           # 0 0 0 1 0
-    |                                          <comment> # 0 0 0 0 1
-    |                                                    # 0 0 0 0 0
+    |           <expression> <comment> <comma> <comment>+ # 0 1 1 1 1
+    |           <expression> <comment> <comma>            # 0 1 1 1 0
+    |           <expression> <comment>         <comment>+ # 0 1 1 0 1
+    |           <expression> <comment>                    # 0 1 1 0 0
+    |           <expression>           <comma> <comment>+ # 0 1 0 1 1
+    |           <expression>           <comma>            # 0 1 0 1 0
+    |           <expression>                   <comment>+ # 0 1 0 0 1
+    |           <expression>                              # 0 1 0 0 0
+    |                        <comment> <comma> <comment>+ # 0 0 1 1 1
+    |                        <comment> <comma>            # 0 0 1 1 0
+    |                        <comment>         <comment>+ # 0 0 1 0 1
+    |                        <comment>                    # 0 0 1 0 0
+    |                                  <comma> <comment>+ # 0 0 0 1 1
+    |                                  <comma>            # 0 0 0 1 0
+    |                                          <comment>+ # 0 0 0 0 1
     }
 
   rule TOP
