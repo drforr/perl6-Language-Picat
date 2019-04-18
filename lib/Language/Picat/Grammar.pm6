@@ -15,7 +15,8 @@ grammar Language::Picat::Grammar
     }
   token variable-name
     {
-    \w+
+    | \w+ '[' \w+ ']'
+    | \w+
     }
 
   rule import-declaration
@@ -94,10 +95,10 @@ grammar Language::Picat::Grammar
 <comment>
 <function-call> '=>'
    <thingie>
-   'foreach(I in 1..N)' 'Doors[I] := 0' 'end' <comma>
+   'foreach(I in 1..N)' <variable-name> ':= 0' 'end' <comma>
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
-        'Doors[J] := 1^Doors[J]'
+        <variable-name> ':= 1^' <variable-name>
      'end' <comma>
      'if N <= 10 then'
        <thingie>
@@ -109,7 +110,7 @@ grammar Language::Picat::Grammar
 <period>
 
 <function-call> '=>'
-   'writeln([I : I in 1..Doors.length, Doors[I] == 1])'
+   'writeln([I : I in 1..Doors.length,' <variable-name> '== 1])'
 <period>
   
 <comment>
@@ -229,7 +230,7 @@ grammar Language::Picat::Grammar
 <function-call> '?=>'
   <thingie>
   <variable-name> '=' <array> <comma>
-  <thingie>
+  <expression>
 <period>
 <comment>
 <function-call> '?=>'
