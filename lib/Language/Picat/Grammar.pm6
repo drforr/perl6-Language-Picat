@@ -64,7 +64,7 @@ grammar Language::Picat::Grammar
     {
     | <assignment-expression>
     | <function-call>
-    | <comment>
+#    | <comment>
     }
 
   rule TOP
