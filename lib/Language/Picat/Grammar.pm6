@@ -45,6 +45,7 @@ grammar Language::Picat::Grammar
   rule argument
     {
     | <function-call>
+    | <array>
     | \w+
     | \d+
     }
@@ -183,31 +184,31 @@ grammar Language::Picat::Grammar
 
 'index(-)'
 <comment>
-'initial_state(' <array> ')' <period>
+<function-call> <period>
 <comment>+
 
 'table'
-'legal_move(' <array> ',M,To)' '?=>'
+<function-call> '?=>'
    <thingie>
    <variable-name> '=' <array>
 <period>
 <comment>
-'legal_move(' <array> ',M,To)' '?=>'
+<function-call> '?=>'
    <thingie>
    <variable-name> '=' <array>
 <period>
 <comment>
-'legal_move(' <array> ',M,To)' '?=>'
+<function-call> '?=>'
    <thingie>
   <variable-name> '=' <array>
 <period>
 <comment>
-'legal_move(' <array> ',M,To)' '?=>'
+<function-call> '?=>'
    <thingie>
    <variable-name> '=' <array>
 <period>
 <comment>
-<function-name> '(' <array> ',M,To)' '=>'
+<function-call> '=>'
   <thingie>
   <variable-name> '=' <array>
 <period>
@@ -219,31 +220,31 @@ grammar Language::Picat::Grammar
 
 <comment>+
 'table'
-'legal_move(' <array> ',M,To,Cost)' '?=>'
+<function-call> '?=>'
   <thingie>
   <variable-name> '=' <array> <comma>
   <thingie>
 <period>
 <comment>
-'legal_move(' <array> ',M,To,Cost)' '?=>'
-  <thingie>
-  <variable-name> '=' <array> <comma>
-  <expression>
-<period>
-<comment>
-'legal_move(' <array> ',M,To,Cost)' '?=>'
+<function-call> '?=>'
   <thingie>
   <variable-name> '=' <array> <comma>
   <thingie>
 <period>
 <comment>
-'legal_move(' <array> ',M,To,Cost)' '?=>'
+<function-call> '?=>'
   <thingie>
   <variable-name> '=' <array> <comma>
   <thingie>
 <period>
 <comment>
-<function-name> '(' <array> ',M,To,Cost)' '=>'
+<function-call> '?=>'
+  <thingie>
+  <variable-name> '=' <array> <comma>
+  <thingie>
+<period>
+<comment>
+<function-call> '=>'
   <thingie>
   <variable-name> '=' <array> <comma>
   <thingie>
