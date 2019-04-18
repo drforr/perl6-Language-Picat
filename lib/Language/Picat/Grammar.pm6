@@ -71,8 +71,7 @@ grammar Language::Picat::Grammar
     | <comment>
     | <comment> <expression> <comma> <comment>
     | <comment> <expression> <comma>
-    |           <expression> <comma> <comment>
-    |           <expression> <comma>
+    |           <expression> <comma> <comment>?
     |           <expression>
     }  
 
