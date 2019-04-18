@@ -32,7 +32,7 @@ grammar Language::Picat::Grammar
   rule function-definition
     {
     <function-name> '=>'
-      <expression>+ %% <comma>
+      <thingie>+
     <period>
     }
 
@@ -245,11 +245,7 @@ grammar Language::Picat::Grammar
   <thingie>
 <period>
 <comment>
-<function-call> '=>'
-  <thingie>
-  <thingie>
-  <thingie>
-<period>
+<function-definition>
 <comment>+
 
       ]
