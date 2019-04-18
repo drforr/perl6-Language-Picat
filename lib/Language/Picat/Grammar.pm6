@@ -152,21 +152,21 @@ grammar Language::Picat::Grammar
 'initial_state([2,4,1,7,5,3,8,6])' '.' <statement>+
 
 'table'
-'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To)' '?=>' <variable-name> '=' '1' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
-'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To)' '?=>' <variable-name> '=' '2' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
-'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To)' '?=>' <variable-name> '=' '3' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
-'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To)' '?=>' <variable-name> '=' '4' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
-<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)' '=>' <variable-name> '=' '5' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To)' '?=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To)' '?=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To)' '?=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To)' '?=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To)' '=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8]' '.' <statement>
 
 <function-call> '=>' <variable-name> '= [1,2,3,4,5,6,7,8]' '.'
 
 <statement>+
 'table'
-'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To,Cost)' '?=>' <variable-name> '=' '1' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=' '1' '.' <statement>
-'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost)' '?=>' <variable-name> '=' '2' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=' '1' '.' <statement>
-'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To,Cost)' '?=>' <variable-name> '=' '3' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=' '1' '.' <statement>
-'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To,Cost)' '?=>' <variable-name> '=' '4' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=' '1' '.' <statement>
-<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)' '=>' <variable-name> '=' '5' ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <variable-name> '=' '1' '.' <statement>
+'legal_move([M4,M3,M2,M1,M5,M6,M7,M8],M,To,Cost)' '?=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <statement> '.' <statement>
+'legal_move([M1,M5,M4,M3,M2,M6,M7,M8],M,To,Cost)' '?=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <statement> '.' <statement>
+'legal_move([M1,M2,M6,M5,M4,M3,M7,M8],M,To,Cost)' '?=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <statement> '.' <statement>
+'legal_move([M1,M2,M3,M7,M6,M5,M4,M8],M,To,Cost)' '?=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <statement> '.' <statement>
+<function-name> '([M1,M2,M3,M4,M8,M7,M6,M5],M,To,Cost)' '=>' <statement> ',' <variable-name> '=' '[M1,M2,M3,M4,M5,M6,M7,M8],' <statement> '.' <statement>
 
 <statement>+
 
