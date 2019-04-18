@@ -78,7 +78,7 @@ grammar Language::Picat::Grammar
 
 <function-definition>
 
-<statement>
+<comment>
 <function-call> '=>'
    <statement> ','
    'foreach(I in 1..N)' 'Doors[I] := 0' 'end' ','
@@ -99,7 +99,7 @@ grammar Language::Picat::Grammar
    'writeln([I : I in 1..Doors.length, Doors[I] == 1])'
 '.'
   
-<statement>
+<comment>
 <function-call> '=>'
   'foreach(I in 1..N)'
      <statement> ','
@@ -108,7 +108,7 @@ grammar Language::Picat::Grammar
   <statement>
 '.'
 
-<statement>
+<comment>
 <function-call> '=>'
   'writeln([I**2 : I in 1..N, I**2 <= N])'
 '.'
@@ -118,13 +118,12 @@ grammar Language::Picat::Grammar
 <function-definition>
 
 <function-name> '=>'
-   <statement>
+   <comment>
    <statement> ','
    <statement> ','
    <statement> ','
    <statement> ','
-   <statement> ','
-#   'write(' <statement> ')' ','
+   'write(' <statement> ')' ','
    <statement>
 '.'
 
@@ -173,71 +172,71 @@ grammar Language::Picat::Grammar
 'index(-)'
 <statement>
 'initial_state(' <array> ')' '.'
- <statement>+
+<statement>+
 
 'table'
 'legal_move(' <array> ',M,To)' '?=>'
    <statement> ','
    <variable-name> '=' <array>
 '.'
- <statement>
+<comment>
 'legal_move(' <array> ',M,To)' '?=>'
    <statement> ','
    <variable-name> '=' <array>
 '.'
-<statement>
+<comment>
 'legal_move(' <array> ',M,To)' '?=>'
   <statement> ','
   <variable-name> '=' <array>
 '.'
-<statement>
+<comment>
 'legal_move(' <array> ',M,To)' '?=>'
    <statement> ','
    <variable-name> '=' <array>
 '.'
-<statement>
+<comment>
 <function-name> '(' <array> ',M,To)' '=>'
   <statement> ','
   <variable-name> '=' <array>
 '.'
-<statement>
+<comment>
 
 <function-call> '=>'
   <variable-name> '=' <array>
 '.'
 
-<statement>+
+<comment>+
 'table'
 'legal_move(' <array> ',M,To,Cost)' '?=>'
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
 '.'
- <statement>
+<comment>
 'legal_move(' <array> ',M,To,Cost)' '?=>'
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
 '.'
- <statement>
+<comment>
 'legal_move(' <array> ',M,To,Cost)' '?=>'
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
 '.'
- <statement>
+<comment>
 'legal_move(' <array> ',M,To,Cost)' '?=>'
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
 '.'
- <statement>
+<comment>
 <function-name> '(' <array> ',M,To,Cost)' '=>'
   <statement> ','
   <variable-name> '=' <array> ','
   <statement>
 '.'
-<statement>+
+<comment>+
 
       ]
     }
