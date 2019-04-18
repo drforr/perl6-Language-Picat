@@ -41,6 +41,7 @@ grammar Language::Picat::Grammar
 
   rule argument
     {
+    | <function-call>
     | \w+
     | \d+
     }
@@ -118,11 +119,12 @@ grammar Language::Picat::Grammar
 
 <function-name> '=>'
    <statement>
-   'time(' <function-call> ')' ','
    <statement> ','
    <statement> ','
    <statement> ','
-   'write(' <statement> ')' ','
+   <statement> ','
+   <statement> ','
+#   'write(' <statement> ')' ','
    <statement>
 '.'
 
