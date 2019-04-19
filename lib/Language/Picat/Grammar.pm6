@@ -65,13 +65,13 @@ grammar Language::Picat::Grammar
 
   rule assignment-expression
     {
+    | <variable-name> '**' \d+ '<=' <expression>
     | <variable-name> '=' <expression>
     | <comparison-expression>
     }
 
   rule comparison-expression
     {
-    <variable-name> '**' \d+ '<=' <expression>
     <variable-name> '<=' <expression>
     }
 
