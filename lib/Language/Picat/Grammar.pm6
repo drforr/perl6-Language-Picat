@@ -57,32 +57,6 @@ grammar Language::Picat::Grammar
     ']'
     }
 
-#  rule argument <-- argument becomes expression
-#    {
-#    | <expression> <-- remove this term
-#    | <function-call>
-#    | <array>
-#    | \w+
-#    | \d+
-#    }
-#
-#  rule function-call
-#    {
-#    | <function-name> '(' <argument>+ %% <comma> ')' <-- change
-#    | <function-name>
-#    }
-#
-#  rule assignment-expression
-#    {
-#    <variable-name> '=' <argument> <-- argument becomes expression
-#    }
-#
-#  rule expression
-#    {
-#    | <assignment-expression>
-#    | <function-call>
-#    }
-
   rule function-call
     {
     | <function-name> '(' <expression>+ %% <comma> ')'
@@ -94,9 +68,15 @@ grammar Language::Picat::Grammar
     <variable-name> '=' <expression>
     }
 
+  rule comparison-expression
+    {
+    | <expression> '<=' <expression>
+    }
+
   rule expression
     {
     | <assignment-expression>
+    | <comparison-expression>
     | <function-call>
     | <array>
     | <variable-name>
@@ -135,7 +115,7 @@ grammar Language::Picat::Grammar
      'foreach(J in I..I..N)'
         <variable-name> ':= 1^' <variable-name>
      'end' <comma>
-     'if N <= 10 then'
+     'if' 'N' '<=' '10' 'then'
        <thingie>
      'end'
    'end' <comma>
