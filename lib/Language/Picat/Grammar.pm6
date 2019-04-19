@@ -77,7 +77,6 @@ grammar Language::Picat::Grammar
   rule expression
     {
     | <assignment-expression>
-#    | <comparison-expression>
     | <function-call>
     | <array>
     | <variable-name>
@@ -116,7 +115,7 @@ grammar Language::Picat::Grammar
      'foreach(J in I..I..N)'
         <variable-name> ':= 1^' <variable-name>
      'end' <comma>
-     'if' 'N' '<=' '10' 'then'
+     'if' <expression> 'then'
        <thingie>
      'end'
    'end' <comma>
@@ -126,14 +125,14 @@ grammar Language::Picat::Grammar
 <period>
 
 <function-call> '=>'
-   'writeln([I : I in 1..Doors.length,' <variable-name> '== 1])'
+   'writeln([I : I in 1..Doors.length,' <variable-name> '==' '1' '])'
 <period>
   
 <comment>
 <function-call> '=>'
   'foreach(I in 1..N)'
      <thingie>
-     'writeln([I, cond(' <variable-name> '== 1.0*' <function-call> ', open, closed)])'
+     'writeln([I, cond(' <variable-name> '==' '1.0' '*' <function-call> ', open, closed)])'
   'end' <comma>
   <thingie>
 <period>
@@ -171,7 +170,8 @@ grammar Language::Picat::Grammar
 
 <function-name> '=>'
    <thingie>
-   'time(' <function-call> ')' <comma>
+   <thingie>
+   #'time(' <function-call> ')' <comma>
    <thingie>
    <thingie>
    'writeln(' <variable-name> '=' 'L.length' ')' <comma>
