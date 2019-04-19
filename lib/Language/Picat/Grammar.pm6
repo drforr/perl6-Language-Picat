@@ -184,7 +184,8 @@ grammar Language::Picat::Grammar
    <thingie>
    <thingie>
    'writeln(' <variable-name> '=' 'L.length' ')' <comma>
-   'writeln(' <expression> ')' <comma>
+   <thingie>
+   #'writeln(' <expression> ')' <comma>
    <thingie>
 <period>
 
