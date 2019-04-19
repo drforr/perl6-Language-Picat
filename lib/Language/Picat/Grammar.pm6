@@ -71,6 +71,7 @@ grammar Language::Picat::Grammar
 
   rule comparison-expression
     {
+    <variable-name> '==' <expression>
     <variable-name> '<=' <expression>
     }
 
@@ -125,7 +126,8 @@ grammar Language::Picat::Grammar
 <period>
 
 <function-call> '=>'
-   'writeln([I : I in 1..Doors.length,' <variable-name> '==' '1' '])'
+   #'writeln([I : I in 1..Doors.length,' <variable-name> '==' '1' '])'
+   'writeln([I : I in 1..Doors.length,' <expression> '])'
 <period>
   
 <comment>
