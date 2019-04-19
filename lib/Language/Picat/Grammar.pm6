@@ -70,7 +70,7 @@ grammar Language::Picat::Grammar
 
   rule comparison-expression
     {
-    | <expression> '<=' <expression>
+    <variable-name> '<=' <expression>
     }
 
   rule expression
