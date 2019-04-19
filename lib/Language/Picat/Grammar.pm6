@@ -63,9 +63,15 @@ grammar Language::Picat::Grammar
     | <function-name>
     }
 
-  rule assignment-expression
+  rule term
     {
-    | <variable-name> '**' \d+ '<=' <expression>
+    | <variable-name>
+    | \d+
+    }
+
+  rule math-expression
+    {
+    | <variable-name> '**' <term> '<=' <expression>
     | <comparison-expression>
     }
 
@@ -76,7 +82,7 @@ grammar Language::Picat::Grammar
 
   rule expression
     {
-    | <assignment-expression>
+    | <math-expression>
     | <variable-name> '=' <expression>
     | <function-call>
     | <array>
