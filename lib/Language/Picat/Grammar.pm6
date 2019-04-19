@@ -71,7 +71,7 @@ grammar Language::Picat::Grammar
 
   rule math-expression
     {
-    | <variable-name> '**' <term> '<=' <expression>
+    | <term> '**' <comparison-expression>
     | <comparison-expression>
     }
 
@@ -146,7 +146,6 @@ grammar Language::Picat::Grammar
 
 <comment>
 <function-call> '=>'
-  #'writeln([I**2 : I in 1..N, I**2 <= N])'
   'writeln([I**2 : I in 1..N,' <expression> '])'
 <period>
 
