@@ -71,13 +71,13 @@ grammar Language::Picat::Grammar
 
   rule math-expression
     {
-    | <LHS=term> '**' <RHS=comparison-expression>
+    | <LHS=term> ( '**' ) <RHS=comparison-expression>
     | <comparison-expression>
     }
 
   rule comparison-expression
     {
-    <LHS=term> '<=' <RHS=expression>
+    <LHS=term> ( '<=' ) <RHS=expression>
     }
 
   rule expression
