@@ -77,7 +77,7 @@ grammar Language::Picat::Grammar
 
   rule comparison-expression
     {
-    <variable-name> '<=' <expression>
+    <term> '<=' <expression>
     }
 
   rule expression
