@@ -36,6 +36,13 @@ grammar Language::Picat::Grammar
     <period>
     }
 
+  rule fact-definition
+    {
+    <function-call> '?=>'
+      <thingie>+
+    <period>
+    }
+
   rule array
     {
     '['
@@ -189,25 +196,13 @@ grammar Language::Picat::Grammar
 <comment>+
 
 'table'
-<function-call> '?=>'
-   <thingie>
-   <thingie>
-<period>
+<fact-definition>
 <comment>
-<function-call> '?=>'
-   <thingie>
-   <thingie>
-<period>
+<fact-definition>
 <comment>
-<function-call> '?=>'
-   <thingie>
-   <thingie>
-<period>
+<fact-definition>
 <comment>
-<function-call> '?=>'
-   <thingie>
-   <thingie>
-<period>
+<fact-definition>
 <comment>
 <function-definition>
 <comment>
@@ -216,29 +211,13 @@ grammar Language::Picat::Grammar
 
 <comment>+
 'table'
-<function-call> '?=>'
-  <thingie>
-  <thingie>
-  <thingie>
-<period>
+<fact-definition>
 <comment>
-<function-call> '?=>'
-  <thingie>
-  <thingie>
-  <thingie>
-<period>
+<fact-definition>
 <comment>
-<function-call> '?=>'
-  <thingie>
-  <thingie>
-  <thingie>
-<period>
+<fact-definition>
 <comment>
-<function-call> '?=>'
-  <thingie>
-  <thingie>
-  <thingie>
-<period>
+<fact-definition>
 <comment>
 <function-definition>
 <comment>+
