@@ -52,6 +52,7 @@ grammar Language::Picat::Grammar
 
   rule argument
     {
+    | <expression>
     | <function-call>
     | <array>
     | \w+
@@ -138,20 +139,12 @@ grammar Language::Picat::Grammar
 
 <function-definition>
 
-<function-name> '=>'
-   <thingie>
-   <thingie>
-   <thingie>
-   <thingie>
-   <thingie>
-   'write(' <expression> ')' <comma>
-   <thingie>
-<period>
+<function-definition>
 
 <function-name> '=>'
    'foreach(Len in 1..15)'
       <thingie>
-      'write(' <expression> ')' <comma>
+      <thingie>
       <thingie>
       <thingie>
       'time(' <variable-name> '=' 'findall(L, $plan(L)))' <comma>
@@ -174,7 +167,7 @@ grammar Language::Picat::Grammar
    <thingie>
    <thingie>
    'writeln(' <variable-name> '=' 'L.length' ')' <comma>
-   'writeln(' <expression> ')' <comma>
+   <thingie>
    <thingie>
 <period>
 
@@ -185,7 +178,6 @@ grammar Language::Picat::Grammar
    <thingie>
    'writeln(' <variable-name> '=' 'L.length' ')' <comma>
    <thingie>
-   #'writeln(' <expression> ')' <comma>
    <thingie>
 <period>
 
