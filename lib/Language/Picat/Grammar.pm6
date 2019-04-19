@@ -43,37 +43,64 @@ grammar Language::Picat::Grammar
     <period>
     }
 
+#  rule array
+#    {
+#    '['
+#    <argument>+ %% <comma>
+#    ']'
+#    }
+
   rule array
     {
     '['
-    <argument>+ %% <comma>
+    <expression>+ %% <comma>
     ']'
     }
 
-  rule argument
-    {
-    | <expression>
-    | <function-call>
-    | <array>
-    | \w+
-    | \d+
-    }
+#  rule argument <-- argument becomes expression
+#    {
+#    | <expression> <-- remove this term
+#    | <function-call>
+#    | <array>
+#    | \w+
+#    | \d+
+#    }
+#
+#  rule function-call
+#    {
+#    | <function-name> '(' <argument>+ %% <comma> ')' <-- change
+#    | <function-name>
+#    }
+#
+#  rule assignment-expression
+#    {
+#    <variable-name> '=' <argument> <-- argument becomes expression
+#    }
+#
+#  rule expression
+#    {
+#    | <assignment-expression>
+#    | <function-call>
+#    }
 
   rule function-call
     {
-    | <function-name> '(' <argument>+ %% <comma> ')'
+    | <function-name> '(' <expression>+ %% <comma> ')'
     | <function-name>
     }
 
   rule assignment-expression
     {
-    <variable-name> '=' <argument>
+    <variable-name> '=' <expression>
     }
 
   rule expression
     {
     | <assignment-expression>
     | <function-call>
+    | <array>
+    | <variable-name>
+    | \d+
     }
 
   rule thingie
