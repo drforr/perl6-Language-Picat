@@ -43,13 +43,6 @@ grammar Language::Picat::Grammar
     <period>
     }
 
-#  rule array
-#    {
-#    '['
-#    <argument>+ %% <comma>
-#    ']'
-#    }
-
   rule array
     {
     '['
@@ -65,7 +58,9 @@ grammar Language::Picat::Grammar
 
   rule term
     {
+    | <function-call>
     | <variable-name>
+    | <array>
     | \d+
     }
 
@@ -84,10 +79,7 @@ grammar Language::Picat::Grammar
     {
     | <math-expression>
     | <variable-name> '=' <expression>
-    | <function-call>
-    | <array>
-    | <variable-name>
-    | \d+
+    | <term>
     }
 
   rule thingie
