@@ -24,7 +24,7 @@ grammar Language::Picat::Grammar
   rule parentheses-expression
     {
     | '(' <expression> ')'
-    | <expression>
+    | <term>
     }
 
   rule expression
@@ -56,6 +56,7 @@ subtest 'single term', {
   ok parse( '[M2,M4,M2,M7,M5,M3,M8,M6]' );
 };
 
+ok parse( '(10)' );
 ok parse( 'doors(10)' );
 ok parse( '1^Doors[J]' );
 ok parse( 'N <= 10' );
