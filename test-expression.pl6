@@ -28,7 +28,12 @@ grammar Language::Picat::Grammar
 
   rule exponent-expression
     {
-    | <term> [ '**' <expression> ]*
+    | <multiply-expression> [ '**' <multiply-expression> ]*
+    }
+
+  rule multiply-expression
+    {
+    | <term> [ [ '*' | '/' ] <expression> ]*
     }
 
   rule expression
@@ -91,6 +96,18 @@ subtest 'exponent', {
   ok parse( '1**2' );
 };
 
+subtest 'multiplcation/division', {
+  subtest 'failing', {
+    ok !parse( '1*' );
+    ok !parse( '*2' );
+    ok !parse( '1/' );
+    ok !parse( '/2' );
+  };
+
+  ok parse( '1*2' );
+  ok parse( '1/2' );
+};
+
 subtest 'P E', {
   subtest 'failing', {
     ok !parse( '1**(' );
@@ -98,13 +115,32 @@ subtest 'P E', {
     ok !parse( '(1**)' );
     ok !parse( '(1**' );
     ok !parse( ')1**' );
+    ok !parse( '(1**2)**3)' );
+    ok !parse( '(1**2)**3(' );
   };
 
   ok parse( '(1**2)' );
   ok parse( '(1)**2' );
   ok parse( '1**(2)' );
   ok parse( '1**(2**3)' );
+  ok parse( '(1**2)**3' );
   ok parse( '1**2**3' );
+};
+
+subtest 'P E M', {
+  subtest 'failing', {
+    ok !parse( '1***2' );
+    ok !parse( '1**2*' );
+    ok !parse( '1**2/' );
+    ok !parse( '1*2*' );
+    ok !parse( '1*2/' );
+    ok !parse( '1*2*/' );
+    ok !parse( '1*2/*' );
+  };
+
+  ok parse( '1**2*3' );
+  ok parse( '1*2**3' );
+  ok parse( '1/2**3' );
 };
 
 ok parse( 'doors(10)' );
