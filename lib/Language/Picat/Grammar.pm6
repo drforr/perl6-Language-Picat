@@ -84,27 +84,6 @@ grammar Language::Picat::Grammar
     | <term>
     }
 
-token new-unsigned-number
-  {
-  | \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]?
-  }
-
-token new-variable-name { \w+ }
-token new-method-name { \w+ }
-
-token new-term
-  {
-  | '[' <expression>* %% ',' ']'
-  | <new-variable-name> '.' <new-method-name>
-  | <new-variable-name>
-  | <new-unsigned-number>
-  }
-
-rule new-expression
-  {
-  | <new-term>
-  }
-
   rule thingie
     {
       [

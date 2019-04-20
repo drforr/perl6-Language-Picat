@@ -2,13 +2,36 @@ use v6;
 
 use lib 'lib';
 use Test;
-use Language::Picat::Grammar;
+
+grammar Language::Picat::Grammar
+  {
+  token unsigned-number
+    {
+    | \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]?
+    }
+
+  token variable-name { \w+ }
+  token method-name { \w+ }
+
+  token term
+    {
+    | '[' <expression>* %% ',' ']'
+    | <variable-name> '.' <method-name>
+    | <variable-name>
+    | <unsigned-number>
+    }
+
+  rule expression
+    {
+    | <term>
+    }
+  }
 
 my $g = Language::Picat::Grammar.new;
 
 sub parse( Str $str )
   {
-  $g.parse( $str, :rule( 'new-expression' ) );
+  $g.parse( $str, :rule( 'expression' ) );
   }
 
 # Don't consider 'Doors = new_array(...)' an expression for the moment.
