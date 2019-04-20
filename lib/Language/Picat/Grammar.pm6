@@ -11,11 +11,13 @@ grammar Language::Picat::Grammar
     }
   token function-name
     {
-    \w+
+    | '$' \w+
+    | \w+
     }
   token variable-name
     {
     | \w+ '[' \w+ ']'
+    | \w+ '.' \w+
     | \w+
     }
 
@@ -46,7 +48,7 @@ grammar Language::Picat::Grammar
   rule array
     {
     '['
-    <expression>+ %% <comma>
+    <expression>* %% <comma>
     ']'
     }
 
@@ -94,14 +96,12 @@ grammar Language::Picat::Grammar
 
   rule TOP
     {
-    ^ <comment>* <import-declaration>? <program-body> $
+    ^ <comment>* <import-declaration>? <comment>* <program-body> $
     }
 
   rule program-body
     {
       [
-      <comment>+
-
 <function-definition>
 
 <function-definition>
@@ -124,7 +124,7 @@ grammar Language::Picat::Grammar
 <period>
 
 <function-call> '=>'
-   'writeln([I : I in 1..Doors.length,' <variable-name> '==' '1' '])'
+   'writeln([I : I in 1..' <variable-name> ',' <variable-name> '==' '1' '])'
 <period>
   
 <comment>
@@ -153,37 +153,28 @@ grammar Language::Picat::Grammar
       <thingie>
       <thingie>
       <thingie>
-      'time(' <variable-name> '=' 'findall(L, $plan(L)))' <comma>
+      'time(' <variable-name> '=' 'findall(L,' <function-call> '))' <comma>
       <thingie>
-      'writeln(' <variable-name> '=' 'All.length'')'
+      <thingie>
    'end'
 <period>
 
 <function-name> '=>'
   <thingie>
-  <variable-name> '=' 'findall(L,$plan(L))' <comma>
+  <variable-name> '=' 'findall(L,' <function-call> ')' <comma>
   <thingie>
-  'writeln(' <variable-name> '=' 'All.length' ')' <comma>
+  <thingie>
   <thingie>
 <period>
 
-<function-name> '=>'
-   <thingie>
-   <thingie>
-   #'time(' <function-call> ')' <comma>
-   <thingie>
-   <thingie>
-   'writeln(' <variable-name> '=' 'L.length' ')' <comma>
-   <thingie>
-   <thingie>
-<period>
+<function-definition>
 
 <function-name> '=>'
    <thingie>
-   'time(plan3(Init,L,Cost,[]))' <comma>
+   'time(' <function-call> ')' <comma>
    <thingie>
    <thingie>
-   'writeln(' <variable-name> '=' 'L.length' ')' <comma>
+   <thingie>
    <thingie>
    <thingie>
 <period>
