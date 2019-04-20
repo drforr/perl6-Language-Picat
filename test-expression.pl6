@@ -33,12 +33,17 @@ grammar Language::Picat::Grammar
 
   rule multiply-expression
     {
-    | <term> [ [ '*' | '/' ] <add-expression> ]*
+    | <add-expression> [ [ '*' | '/' ] <add-expression> ]*
     }
 
   rule add-expression
     {
-    | <term> [ [ '+' | '-' ] <expression> ]*
+    | <logic-expression> [ [ '+' | '-' ] <logic-expression> ]*
+    }
+
+  rule logic-expression
+    {
+    | <term> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
     }
 
   rule expression
@@ -144,7 +149,7 @@ subtest 'P E', {
   ok parse( '1**2**3' );
 };
 
-subtest 'P E M', {
+subtest 'P E MD', {
   subtest 'failing', {
     ok !parse( '1***2' );
     ok !parse( '1**2*' );
@@ -160,7 +165,7 @@ subtest 'P E M', {
   ok parse( '1/2**3' );
 };
 
-subtest 'P E M', {
+subtest 'P E MD AS', {
   subtest 'failing', {
     ok !parse( '1**+2' );
     ok !parse( '1*-2*' );
@@ -174,6 +179,16 @@ subtest 'P E M', {
   ok parse( '1*2+3' );
   ok parse( '1-2*3' );
   ok parse( '1+2*3' );
+};
+
+subtest 'P E MD AS L', {
+  subtest 'failing', {
+    ok !parse( '1**==5' );
+    ok !parse( '1**<=' );
+    ok !parse( '1<=**' );
+  };
+
+  ok parse( '1**2*3+4<=4' );
 };
 
 ok parse( 'doors(10)' );
