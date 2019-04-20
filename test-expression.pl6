@@ -23,13 +23,7 @@ grammar Language::Picat::Grammar
 
   rule parentheses-expression
     {
-    | '(' <exponentiation-expression> ')'
-    | <exponentiation-expression>
-    }
-
-  rule exponentiation-expression
-    {
-    | <term> '**' <expression>
+    | '(' <expression> ')'
     | <term>
     }
 
@@ -55,6 +49,14 @@ sub parse( Str $str )
 # Don't consider 'Doors = new_array(...)' an expression for the moment.
 #
 subtest 'single term', {
+  subtest 'failing', {
+    ok !parse( 'L.' );
+    ok !parse( '[' );
+    ok !parse( ']' );
+    ok !parse( '[foo' );
+    ok !parse( 'foo]' );
+  };
+
   ok parse( '0' );
   ok parse( 'Cost' );
   ok parse( 'L.length' );
@@ -63,9 +65,17 @@ subtest 'single term', {
 };
 
 subtest 'parentheses', {
+  subtest 'failing', {
+    ok !parse( '(10' );
+    ok !parse( '10)' );
+    ok !parse( '((10)' );
+    ok !parse( '(10))' );
+  };
+
   ok parse( '(10)' );
-  ok parse( '10**2' );
-  ok parse( '(10**2)' );
+  ok parse( '((10))' );
+  ok parse( '([(10)])' );
+  ok parse( '[10,(10),((10))]' );
 };
 
 ok parse( 'doors(10)' );
