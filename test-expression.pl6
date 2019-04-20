@@ -16,20 +16,24 @@ grammar Language::Picat::Grammar
   token term
     {
     | '[' <expression>* %% ',' ']'
-    | <variable-name> '.' <method-name>
-    | <variable-name>
+    | <variable-name> [ '.' <method-name> ]*
     | <unsigned-number>
+    | <parentheses-expression>
     }
 
   rule parentheses-expression
     {
-    | '(' <expression> ')'
-    | <term>
+    | '(' <expression>* ')'
+    }
+
+  rule exponent-expression
+    {
+    | <term> [ '**' <expression> ]*
     }
 
   rule expression
     {
-    | <parentheses-expression>
+    | <exponent-expression>
     | <term>
     }
 
@@ -76,6 +80,31 @@ subtest 'parentheses', {
   ok parse( '((10))' );
   ok parse( '([(10)])' );
   ok parse( '[10,(10),((10))]' );
+};
+
+subtest 'exponent', {
+  subtest 'failing', {
+    ok !parse( '1**' );
+    ok !parse( '**2' );
+  };
+
+  ok parse( '1**2' );
+};
+
+subtest 'P E', {
+  subtest 'failing', {
+    ok !parse( '1**(' );
+    ok !parse( '1**)' );
+    ok !parse( '(1**)' );
+    ok !parse( '(1**' );
+    ok !parse( ')1**' );
+  };
+
+  ok parse( '(1**2)' );
+  ok parse( '(1)**2' );
+  ok parse( '1**(2)' );
+  ok parse( '1**(2**3)' );
+  ok parse( '1**2**3' );
 };
 
 ok parse( 'doors(10)' );
