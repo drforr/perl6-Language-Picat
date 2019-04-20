@@ -33,7 +33,12 @@ grammar Language::Picat::Grammar
 
   rule multiply-expression
     {
-    | <term> [ [ '*' | '/' ] <expression> ]*
+    | <term> [ [ '*' | '/' ] <add-expression> ]*
+    }
+
+  rule add-expression
+    {
+    | <term> [ [ '+' | '-' ] <expression> ]*
     }
 
   rule expression
@@ -108,6 +113,18 @@ subtest 'multiplcation/division', {
   ok parse( '1/2' );
 };
 
+subtest 'addition/division', {
+  subtest 'failing', {
+    ok !parse( '1+' );
+    ok !parse( '+2' );
+    ok !parse( '1-' );
+    ok !parse( '-2' );
+  };
+
+  ok parse( '1+2' );
+  ok parse( '1-2' );
+};
+
 subtest 'P E', {
   subtest 'failing', {
     ok !parse( '1**(' );
@@ -141,6 +158,22 @@ subtest 'P E M', {
   ok parse( '1**2*3' );
   ok parse( '1*2**3' );
   ok parse( '1/2**3' );
+};
+
+subtest 'P E M', {
+  subtest 'failing', {
+    ok !parse( '1**+2' );
+    ok !parse( '1*-2*' );
+    ok !parse( '1**2+' );
+    ok !parse( '1*2-' );
+    ok !parse( '1*2-' );
+    ok !parse( '1*2*+' );
+    ok !parse( '1*2/-' );
+  };
+
+  ok parse( '1*2+3' );
+  ok parse( '1-2*3' );
+  ok parse( '1+2*3' );
 };
 
 ok parse( 'doors(10)' );
