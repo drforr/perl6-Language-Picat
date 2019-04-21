@@ -124,7 +124,10 @@ grammar Language::Picat::Grammar
 
   rule foreach
     {
-    'foreach' '(' <variable-name> 'in' <expression> '..' <expression> ')'
+    'foreach'
+      '('
+      <variable-name> 'in' <expression> [ '..' <expression> ]+
+      ')'
       [ <statement> <comma> <comment>* ]*
       <statement> <comment>*
     'end'
@@ -154,9 +157,7 @@ grammar Language::Picat::Grammar
    <statement> <comma> <comment>*
    <statement> <comma> <comment>*
    'foreach(I in 1..N)'
-     'foreach(J in I..I..N)'
-        <statement> <comment>*
-     'end' <comma>
+     <statement> <comma> <comment>*
      'if' <expression> 'then'
        <statement> <comment>*
      'end'
