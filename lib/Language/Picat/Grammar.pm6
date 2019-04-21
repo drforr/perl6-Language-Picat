@@ -133,9 +133,18 @@ grammar Language::Picat::Grammar
     'end'
     }
 
+  rule if
+    {
+    'if' <expression> 'then'
+      [ <statement> <comma> <comment>* ]*
+      <statement> <comment>*
+    'end'
+    }
+
   rule statement
     {
     | <foreach>
+    | <if>
     | <binding>
     | <expression>
     }
@@ -158,9 +167,10 @@ grammar Language::Picat::Grammar
    <statement> <comma> <comment>*
    'foreach(I in 1..N)'
      <statement> <comma> <comment>*
-     'if' <expression> 'then'
-       <statement> <comment>*
-     'end'
+     <statement> <comment>*
+     #'if' <expression> 'then'
+     #  <statement> <comment>*
+     #'end'
    'end' <comma>
    <statement> <comma> <comment>*
    <statement> <comma> <comment>*
