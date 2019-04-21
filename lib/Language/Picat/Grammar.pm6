@@ -32,7 +32,7 @@ grammar Language::Picat::Grammar
 
   rule function-definition
     {
-    <function-call> '=>'
+    <atom-or-call> '=>'
       <comment>*
       [ <statement> <comma> <comment>* ]*
       <statement> <comment>*
@@ -41,7 +41,7 @@ grammar Language::Picat::Grammar
 
   rule fact-definition
     {
-    <function-call> '?=>'
+    <atom-or-call> '?=>'
       <comment>*
       <expression>+ %% [ <comment>* <comma> ]
       <comment>*
@@ -49,17 +49,17 @@ grammar Language::Picat::Grammar
     <comment>*
     }
 
-  rule array
+  rule variable-list
     {
-    '['
-      [
-      | <expression>* %% <comma>
-      | <expression> ':' <expression> 'in' <expression> '..' <variable-name> ',' <expression>
-      ]
-    ']'
+    '[' <expression>* %% <comma> ']'
     }
 
-  rule function-call
+  rule list-expression
+    {
+    '[' <expression> ':' <expression> 'in' <range> ',' <expression> ']'
+    }
+
+  rule atom-or-call
     {
     | <function-name> '(' <expression>+ %% <comma> ')'
     | <function-name>
@@ -75,11 +75,12 @@ grammar Language::Picat::Grammar
     '(' <expression>? ')'
     }
 
-  rule term
+  rule primary-expression
     {
-    | <function-call>
+    | <atom-or-call>
     | <variable-name>
-    | <array>
+    | <variable-list>
+    | <list-expression>
     | <unsigned-number>
     | <parentheses-expression>
     }
@@ -92,7 +93,7 @@ grammar Language::Picat::Grammar
   rule expression
     {
     | <assignment-expression>
-    | <term>
+    | <primary-expression>
     }
 
   rule assignment-expression
@@ -123,7 +124,7 @@ grammar Language::Picat::Grammar
 
   rule logic-expression
     {
-    | <term> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
+    | <primary-expression> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
     }
 
   rule range
@@ -196,7 +197,7 @@ grammar Language::Picat::Grammar
 
 'index(-)'
 <comment>
-<function-call> <period>
+<atom-or-call> <period>
 <comment>+
 
 'table'
