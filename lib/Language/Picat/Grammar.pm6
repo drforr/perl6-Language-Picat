@@ -122,13 +122,11 @@ grammar Language::Picat::Grammar
     | <term> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
     }
 
-  rule thingie
+  rule statement
     {
-      [
-      | <binding>    <comment>?
-      | <expression> <comment>?
-      |              <comment>
-      ]
+    | <binding>    <comment>*
+    | <expression> <comment>*
+    |              <comment>
     }
 
   rule TOP
@@ -145,19 +143,19 @@ grammar Language::Picat::Grammar
 
 <comment>
 <function-call> '=>'
-   <thingie> <comma> <comment>*
-   'foreach(I in 1..N)' <thingie> <comment>* 'end' <comma>
+   <statement> <comma> <comment>*
+   'foreach(I in 1..N)' <statement> <comment>* 'end' <comma>
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
-        <thingie> <comment>*
+        <statement> <comment>*
      'end' <comma>
      'if' <expression> 'then'
-       <thingie> <comment>*
+       <statement> <comment>*
      'end'
    'end' <comma>
-   <thingie> <comma> <comment>*
-   <thingie> <comma> <comment>*
-   <thingie> <comment>* # See, here we don't *need* the <comma>
+   <statement> <comma> <comment>*
+   <statement> <comma> <comment>*
+   <statement> <comment>* # See, here we don't *need* the <comma>
 <period>
 
 <function-call> '=>'
@@ -167,10 +165,10 @@ grammar Language::Picat::Grammar
 <comment>
 <function-call> '=>'
   'foreach(I in 1..N)'
-     <thingie> <comma> <comment>*
-     <thingie> <comment>*
+     <statement> <comma> <comment>*
+     <statement> <comment>*
   'end' <comma>
-  <thingie> <comment>*
+  <statement> <comment>*
 <period>
 
 <comment>
@@ -186,13 +184,12 @@ grammar Language::Picat::Grammar
 
 <function-name> '=>'
    'foreach(Len in 1..15)'
-      <thingie> <comma> <comment>*
-      <thingie> <comma> <comment>*
-      <thingie> <comma> <comment>*
-      <thingie> <comma> <comment>*
-      'time(' <variable-name> '=' <expression>  ')' <comma> <comment>*
-#      <thingie> <comma> <comment>*
-      <thingie> <comment>*
+      <statement> <comma> <comment>*
+      <statement> <comma> <comment>*
+      <statement> <comma> <comment>*
+      <statement> <comma> <comment>*
+      <statement> <comma> <comment>*
+      <statement> <comment>*
    'end'
 <period>
 
