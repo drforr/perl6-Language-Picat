@@ -58,12 +58,17 @@ grammar Language::Picat::Grammar
     | <function-name>
     }
 
+  token unsigned-number
+    {
+    | \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]?
+    }
+
   rule term
     {
     | <function-call>
     | <variable-name>
     | <array>
-    | \d+
+    | <unsigned-number>
     }
 
   rule math-expression
@@ -84,11 +89,6 @@ grammar Language::Picat::Grammar
     | <term>
     }
 
-#  token unsigned-number
-#    {
-#    | \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]?
-#    }
-#
 #  token variable-name { \w+ }
 #  token method-name { \w+ }
 #
