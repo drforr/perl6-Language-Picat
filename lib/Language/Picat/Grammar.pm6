@@ -71,10 +71,20 @@ grammar Language::Picat::Grammar
     | <parentheses-expression>
     }
 
-  rule expression
+  rule assignment
+    {
+    | <variable-name> '=' <expression>
+    }
+
+  rule binding
     {
     | <variable-name> ':=' <expression>
-    | <variable-name> '=' <expression>
+    }
+
+  rule expression
+    {
+    | <binding>
+    | <assignment>
     | <exponent-expression>
     | <term>
     }
@@ -103,7 +113,7 @@ grammar Language::Picat::Grammar
 
   rule bitwise-expression
     {
-    | <logic-expression> [ [ '^' | '&' | '|' ] <logic-expression> ]*
+    | <logic-expression> [ [ '^' | '/\\' | '\\/' ] <logic-expression> ]*
     }
 
   rule logic-expression
