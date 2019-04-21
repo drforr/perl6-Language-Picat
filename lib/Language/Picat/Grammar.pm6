@@ -104,32 +104,51 @@ grammar Language::Picat::Grammar
   rule assignment-expression
     {
     | <variable-name> '=' <expression>
-    | <exponent-expression>
+    | <concat-expression>
+    }
+
+  rule concat-expression
+    {
+    <exponent-expression> [ '++' <exponent-expression> ]*
     }
 
   rule exponent-expression
     {
-    | <multiply-expression> [ '**' <multiply-expression> ]*
+    <shift-expression> [ '**' <shift-expression> ]*
     }
 
-  rule multiply-expression
+  rule shift-expression
     {
-    | <add-expression> [ [ '*' | '/' ] <add-expression> ]*
+    <add-expression> [ [ '<<' | '>>' ] <add-expression> ]*
     }
 
   rule add-expression
     {
-    | <bitwise-expression> [ [ '+' | '-' ] <bitwise-expression> ]*
+    <multiply-expression> [ [ '+' | '-' ] <multiply-expression> ]*
+    }
+
+  rule multiply-expression
+    {
+    <bitwise-expression>
+    [ [ '*'
+      | '/'
+      | '//'
+      | '/>'
+      | '/<'
+      | 'div'
+      | 'mod'
+      | 'rem'
+      ] <bitwise-expression> ]*
     }
 
   rule bitwise-expression
     {
-    | <logic-expression> [ [ '^' | '/\\' | '\\/' ] <logic-expression> ]*
+    <logic-expression> [ [ '^' | '/\\' | '\\/' ] <logic-expression> ]*
     }
 
   rule logic-expression
     {
-    | <primary-expression> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
+    <primary-expression> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
     }
 
   rule range
@@ -173,19 +192,7 @@ grammar Language::Picat::Grammar
   rule program-body
     {
       [
-<function-definition>
-
-<function-definition>
-
-<function-definition>
-
-<function-definition>
-
-<function-definition>
-
-<function-definition>
-
-<comment>+
+<function-definition>+ %% <comment>*
 
 'index(-)'
 <comment>
