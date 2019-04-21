@@ -122,8 +122,17 @@ grammar Language::Picat::Grammar
     | <term> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
     }
 
+  rule foreach
+    {
+    'foreach' '(' <variable-name> 'in' <expression> '..' <expression> ')'
+      [ <statement> <comma> <comment>* ]*
+      <statement> <comment>*
+    'end'
+    }
+
   rule statement
     {
+    | <foreach>
     | <binding>
     | <expression>
     }
@@ -143,7 +152,7 @@ grammar Language::Picat::Grammar
 <comment>
 <function-call> '=>'
    <statement> <comma> <comment>*
-   'foreach(I in 1..N)' <statement> <comment>* 'end' <comma>
+   <statement> <comma> <comment>*
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
         <statement> <comment>*
@@ -163,10 +172,7 @@ grammar Language::Picat::Grammar
   
 <comment>
 <function-call> '=>'
-  'foreach(I in 1..N)'
-     <statement> <comma> <comment>*
-     <statement> <comment>*
-  'end' <comma>
+  <statement> <comma> <comment>*
   <statement> <comment>*
 <period>
 
@@ -182,14 +188,7 @@ grammar Language::Picat::Grammar
 <function-definition>
 
 <function-name> '=>'
-   'foreach(Len in 1..15)'
-      <statement> <comma> <comment>*
-      <statement> <comma> <comment>*
-      <statement> <comma> <comment>*
-      <statement> <comma> <comment>*
-      <statement> <comma> <comment>*
-      <statement> <comment>*
-   'end'
+   <statement> <comment>*
 <period>
 
 <function-definition>
