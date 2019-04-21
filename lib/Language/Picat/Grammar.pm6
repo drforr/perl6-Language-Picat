@@ -5,19 +5,17 @@ grammar Language::Picat::Grammar
   token period { '.' }
   token comma { ',' }
 
-  token module-name
-    {
-    \w+
-    }
+  token module-name { \w+ }
+
   token function-name
     {
-    | '$' \w+
-    | \w+
+    '$'? \w+
     }
+
   token variable-name
     {
     | \w+ '[' \w+ ']'
-    | \w+ '.' \w+
+    | \w+ [ '.' \w+ ]*
     | \w+
     }
 
@@ -25,6 +23,7 @@ grammar Language::Picat::Grammar
     {
     'import' <module-name> <period>
     }
+
   token comment
     {
     | '/*' .*? '*/' \s*
@@ -69,74 +68,42 @@ grammar Language::Picat::Grammar
     | <variable-name>
     | <array>
     | <unsigned-number>
-    }
-
-  rule math-expression
-    {
-    | <LHS=term> ( '**' ) <RHS=comparison-expression>
-    | <comparison-expression>
-    }
-
-  rule comparison-expression
-    {
-    <LHS=term> ( '<=' ) <RHS=expression>
+    | <parentheses-expression>
     }
 
   rule expression
     {
-    | <math-expression>
     | <variable-name> '=' <expression>
+    | <exponent-expression>
     | <term>
     }
 
-#  token variable-name { \w+ }
-#  token method-name { \w+ }
-#
-#  token term
-#    {
-#    | '[' <expression>* %% ',' ']'
-#    | <variable-name> [ '.' <method-name> ]*
-#    | <unsigned-number>
-#    | <parentheses-expression>
-#    }
-#
-#  rule parentheses-expression
-#    {
-#    | '(' <expression>* ')'
-#    }
-#
-#  rule exponent-expression
-#    {
-#    | <multiply-expression> [ '**' <multiply-expression> ]*
-#    }
-#
-#  rule multiply-expression
-#    {
-#    | <add-expression> [ [ '*' | '/' ] <add-expression> ]*
-#    }
-#
-#  rule add-expression
-#    {
-#    | <logic-expression> [ [ '+' | '-' ] <logic-expression> ]*
-#    }
-#
-#  rule logic-expression
-#    {
-#    | <term> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
-#    }
-#
-#  rule expression
-#    {
-#    | <exponent-expression>
-#    | <term>
-#    }
-#
-#  rule everything
-#    {
-#    ^ <expression> $
-#    }
+  rule parentheses-expression
+    {
+    '('
+    <expression>?
+    ')'
+    }
 
+  rule exponent-expression
+    {
+    | <multiply-expression> [ '**' <multiply-expression> ]*
+    }
 
+  rule multiply-expression
+    {
+    | <add-expression> [ [ '*' | '/' ] <add-expression> ]*
+    }
+
+  rule add-expression
+    {
+    | <logic-expression> [ [ '+' | '-' ] <logic-expression> ]*
+    }
+
+  rule logic-expression
+    {
+    | <term> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
+    }
 
   rule thingie
     {
