@@ -130,7 +130,6 @@ grammar Language::Picat::Grammar
       |              <comment>
       ]
       <comma>?
-      <comment>*
     }
 
   rule TOP
@@ -147,19 +146,19 @@ grammar Language::Picat::Grammar
 
 <comment>
 <function-call> '=>'
-   <thingie>
-   'foreach(I in 1..N)' <thingie> 'end' <comma>
+   <thingie> <comment>*
+   'foreach(I in 1..N)' <thingie> <comment>* 'end' <comma>
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
-        <thingie>
+        <thingie> <comment>*
      'end' <comma>
      'if' <expression> 'then'
-       <thingie>
+       <thingie> <comment>*
      'end'
    'end' <comma>
-   <thingie>
-   <thingie>
-   <thingie>
+   <thingie> <comment>*
+   <thingie> <comment>*
+   <thingie> <comment>*
 <period>
 
 <function-call> '=>'
@@ -169,10 +168,10 @@ grammar Language::Picat::Grammar
 <comment>
 <function-call> '=>'
   'foreach(I in 1..N)'
-     <thingie>
-     <thingie>
+     <thingie> <comment>*
+     <thingie> <comment>*
   'end' <comma>
-  <thingie>
+  <thingie> <comment>*
 <period>
 
 <comment>
@@ -188,13 +187,13 @@ grammar Language::Picat::Grammar
 
 <function-name> '=>'
    'foreach(Len in 1..15)'
-      <thingie>
-      <thingie>
-      <thingie>
-      <thingie>
+      <thingie> <comment>*
+      <thingie> <comment>*
+      <thingie> <comment>*
+      <thingie> <comment>*
       'time(' <variable-name> '=' <expression>  ')' <comma>
-      <thingie>
-      <thingie>
+      <thingie> <comment>*
+      <thingie> <comment>*
    'end'
 <period>
 
