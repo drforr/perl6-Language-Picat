@@ -83,7 +83,6 @@ grammar Language::Picat::Grammar
 
   rule expression
     {
-    | <binding>
     | <assignment>
     | <exponent-expression>
     | <term>
@@ -124,6 +123,7 @@ grammar Language::Picat::Grammar
   rule thingie
     {
       [
+      | <binding>    <comment>?
       | <expression> <comment>?
       |              <comment>
       ]
