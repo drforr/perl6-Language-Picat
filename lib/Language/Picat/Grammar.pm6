@@ -62,6 +62,11 @@ grammar Language::Picat::Grammar
     | \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]?
     }
 
+  rule parentheses-expression
+    {
+    '(' <expression>? ')'
+    }
+
   rule term
     {
     | <function-call>
@@ -71,11 +76,6 @@ grammar Language::Picat::Grammar
     | <parentheses-expression>
     }
 
-  rule assignment
-    {
-    | <variable-name> '=' <expression>
-    }
-
   rule binding
     {
     | <variable-name> ':=' <expression>
@@ -83,16 +83,14 @@ grammar Language::Picat::Grammar
 
   rule expression
     {
-    | <assignment>
-    | <exponent-expression>
+    | <assignment-expression>
     | <term>
     }
 
-  rule parentheses-expression
+  rule assignment-expression
     {
-    '('
-    <expression>?
-    ')'
+    | <variable-name> '=' <expression>
+    | <exponent-expression>
     }
 
   rule exponent-expression
