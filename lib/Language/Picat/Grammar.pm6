@@ -73,6 +73,7 @@ grammar Language::Picat::Grammar
 
   rule expression
     {
+    | <variable-name> ':=' <expression>
     | <variable-name> '=' <expression>
     | <exponent-expression>
     | <term>
@@ -135,10 +136,10 @@ grammar Language::Picat::Grammar
 <comment>
 <function-call> '=>'
    <thingie>
-   'foreach(I in 1..N)' <variable-name> ':= 0' 'end' <comma>
+   'foreach(I in 1..N)' <thingie> 'end' <comma>
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
-        <variable-name> ':=' <expression>
+        <thingie>
      'end' <comma>
      'if' <expression> 'then'
        <thingie>
@@ -150,14 +151,14 @@ grammar Language::Picat::Grammar
 <period>
 
 <function-call> '=>'
-   'writeln([I : I in 1..' <variable-name> ',' <variable-name> '==' '1' '])'
+   'writeln([I : I in 1..' <variable-name> ',' <expression> '])'
 <period>
   
 <comment>
 <function-call> '=>'
   'foreach(I in 1..N)'
      <thingie>
-     'writeln([I, cond(' <variable-name> '==' '1.0' '*' <function-call> ', open, closed)])'
+     <thingie>
   'end' <comma>
   <thingie>
 <period>
@@ -179,31 +180,17 @@ grammar Language::Picat::Grammar
       <thingie>
       <thingie>
       <thingie>
-      'time(' <variable-name> '=' 'findall(L,' <function-call> '))' <comma>
+      'time(' <variable-name> '=' <expression>  ')' <comma>
       <thingie>
       <thingie>
    'end'
 <period>
 
-<function-name> '=>'
-  <thingie>
-  <variable-name> '=' 'findall(L,' <function-call> ')' <comma>
-  <thingie>
-  <thingie>
-  <thingie>
-<period>
+<function-definition>
 
 <function-definition>
 
-<function-name> '=>'
-   <thingie>
-   'time(' <function-call> ')' <comma>
-   <thingie>
-   <thingie>
-   <thingie>
-   <thingie>
-   <thingie>
-<period>
+<function-definition>
 
 <comment>+
 
