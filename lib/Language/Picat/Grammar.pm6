@@ -124,9 +124,8 @@ grammar Language::Picat::Grammar
 
   rule statement
     {
-    | <binding>    <comment>*
-    | <expression> <comment>*
-    |              <comment>
+    | <binding>
+    | <expression>
     }
 
   rule TOP
