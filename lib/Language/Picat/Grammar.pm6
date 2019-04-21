@@ -51,7 +51,10 @@ grammar Language::Picat::Grammar
   rule array
     {
     '['
-    <expression>* %% <comma>
+      [
+      | <expression>* %% <comma>
+      | <expression> ':' <expression> 'in' <expression> '..' <variable-name> ',' <expression>
+      ]
     ']'
     }
 
@@ -164,17 +167,13 @@ grammar Language::Picat::Grammar
 <comment>
 <function-definition>
 
-<function-call> '=>'
-   'writeln([I : I in 1..' <variable-name> ',' <expression> '])'
-<period>
+<function-definition>
   
 <comment>
 <function-definition>
 
 <comment>
-<function-call> '=>'
-  'writeln([I**2 : I in 1..N,' <expression> '])'
-<period>
+<function-definition>
 
     ||
 
