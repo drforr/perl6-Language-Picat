@@ -19,9 +19,14 @@ grammar Language::Picat::Grammar
     | \w+
     }
 
+  rule module-declaration
+    {
+    'module' <comment>* <module-name> <period> <comment>*
+    }
+
   rule import-declaration
     {
-    'import' <module-name> <period>
+    'import' <comment>* <module-name>+ %% <comma> <period> <comment>*
     }
 
   token comment
@@ -158,29 +163,16 @@ grammar Language::Picat::Grammar
 
   rule TOP
     {
-    ^ <comment>* <import-declaration>? <comment>* <program-body> $
+    ^ <comment>*
+      <module-declaration>?
+      <import-declaration>*
+      <program-body>
+    $
     }
 
   rule program-body
     {
       [
-<function-definition>
-
-<function-definition>
-
-<comment>
-<function-definition>
-
-<function-definition>
-  
-<comment>
-<function-definition>
-
-<comment>
-<function-definition>
-
-    ||
-
 <function-definition>
 
 <function-definition>
@@ -227,6 +219,9 @@ grammar Language::Picat::Grammar
 <function-definition>
 <comment>+
 
+||
+
+<function-definition>+ %% <comment>*
       ]
     }
   }
