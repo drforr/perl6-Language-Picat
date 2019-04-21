@@ -126,12 +126,14 @@ grammar Language::Picat::Grammar
     | <term> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
     }
 
+  rule range
+    {
+    <expression> [ '..' <expression> [ '..' <expression> ]? ]?
+    }
+
   rule foreach
     {
-    'foreach'
-      '('
-      <variable-name> 'in' <expression> [ '..' <expression> ]+
-      ')'
+    'foreach' '(' <variable-name> 'in' <range> ')'
       [ <statement> <comma> <comment>* ]*
       <statement> <comment>*
     'end'
