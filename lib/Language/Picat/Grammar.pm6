@@ -97,7 +97,12 @@ grammar Language::Picat::Grammar
 
   rule add-expression
     {
-    | <logic-expression> [ [ '+' | '-' ] <logic-expression> ]*
+    | <bitwise-expression> [ [ '+' | '-' ] <bitwise-expression> ]*
+    }
+
+  rule bitwise-expression
+    {
+    | <logic-expression> [ [ '^' | '&' | '|' ] <logic-expression> ]*
     }
 
   rule logic-expression
@@ -133,7 +138,7 @@ grammar Language::Picat::Grammar
    'foreach(I in 1..N)' <variable-name> ':= 0' 'end' <comma>
    'foreach(I in 1..N)'
      'foreach(J in I..I..N)'
-        <variable-name> ':= 1^' <variable-name>
+        <variable-name> ':=' <expression>
      'end' <comma>
      'if' <expression> 'then'
        <thingie>
