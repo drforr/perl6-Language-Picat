@@ -34,8 +34,8 @@ grammar Language::Picat::Grammar
     {
     <function-call> '=>'
       <comment>*
-      <expression>+ %% [ <comment>* <comma> ]
-      <comment>*
+      [ <statement> <comma> <comment>* ]*
+      <statement> <comment>*
     <period>
     }
 
@@ -162,30 +162,14 @@ grammar Language::Picat::Grammar
 <function-definition>
 
 <comment>
-<function-call> '=>'
-   <statement> <comma> <comment>*
-   <statement> <comma> <comment>*
-   'foreach(I in 1..N)'
-     <statement> <comma> <comment>*
-     <statement> <comment>*
-     #'if' <expression> 'then'
-     #  <statement> <comment>*
-     #'end'
-   'end' <comma>
-   <statement> <comma> <comment>*
-   <statement> <comma> <comment>*
-   <statement> <comment>* # See, here we don't *need* the <comma>
-<period>
+<function-definition>
 
 <function-call> '=>'
    'writeln([I : I in 1..' <variable-name> ',' <expression> '])'
 <period>
   
 <comment>
-<function-call> '=>'
-  <statement> <comma> <comment>*
-  <statement> <comment>*
-<period>
+<function-definition>
 
 <comment>
 <function-call> '=>'
@@ -198,9 +182,7 @@ grammar Language::Picat::Grammar
 
 <function-definition>
 
-<function-name> '=>'
-   <statement> <comment>*
-<period>
+<function-definition>
 
 <function-definition>
 
