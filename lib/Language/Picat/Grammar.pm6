@@ -84,6 +84,60 @@ grammar Language::Picat::Grammar
     | <term>
     }
 
+#  token unsigned-number
+#    {
+#    | \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]?
+#    }
+#
+#  token variable-name { \w+ }
+#  token method-name { \w+ }
+#
+#  token term
+#    {
+#    | '[' <expression>* %% ',' ']'
+#    | <variable-name> [ '.' <method-name> ]*
+#    | <unsigned-number>
+#    | <parentheses-expression>
+#    }
+#
+#  rule parentheses-expression
+#    {
+#    | '(' <expression>* ')'
+#    }
+#
+#  rule exponent-expression
+#    {
+#    | <multiply-expression> [ '**' <multiply-expression> ]*
+#    }
+#
+#  rule multiply-expression
+#    {
+#    | <add-expression> [ [ '*' | '/' ] <add-expression> ]*
+#    }
+#
+#  rule add-expression
+#    {
+#    | <logic-expression> [ [ '+' | '-' ] <logic-expression> ]*
+#    }
+#
+#  rule logic-expression
+#    {
+#    | <term> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
+#    }
+#
+#  rule expression
+#    {
+#    | <exponent-expression>
+#    | <term>
+#    }
+#
+#  rule everything
+#    {
+#    ^ <expression> $
+#    }
+
+
+
   rule thingie
     {
       [
