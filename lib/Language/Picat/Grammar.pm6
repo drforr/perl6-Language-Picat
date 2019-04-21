@@ -33,14 +33,18 @@ grammar Language::Picat::Grammar
   rule function-definition
     {
     <function-call> '=>'
-      <thingie>+
+      <comment>*
+      <expression>+ %% [ <comment>* <comma> ]
+      <comment>*
     <period>
     }
 
   rule fact-definition
     {
     <function-call> '?=>'
-      <thingie>+
+      <comment>*
+      <expression>+ %% [ <comment>* <comma> ]
+      <comment>*
     <period>
     }
 
