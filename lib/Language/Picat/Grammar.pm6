@@ -46,6 +46,7 @@ grammar Language::Picat::Grammar
       <expression>+ %% [ <comment>* <comma> ]
       <comment>*
     <period>
+    <comment>*
     }
 
   rule array
@@ -198,13 +199,13 @@ grammar Language::Picat::Grammar
 
 'table'
 <fact-definition>
-<comment>
+
 <fact-definition>
-<comment>
+
 <fact-definition>
-<comment>
+
 <fact-definition>
-<comment>
+
 <function-definition>
 <comment>
 
@@ -213,13 +214,13 @@ grammar Language::Picat::Grammar
 <comment>+
 'table'
 <fact-definition>
-<comment>
+
 <fact-definition>
-<comment>
+
 <fact-definition>
-<comment>
+
 <fact-definition>
-<comment>
+
 <function-definition>
 <comment>+
 
