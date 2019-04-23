@@ -208,10 +208,6 @@ grammar Language::Picat::Grammar
 <atom-or-call> <period>
 <comment>+
 
-'table'
-<function-definition>+ %% <comment>*
-
-'table'
 <function-definition>+ %% <comment>*
 
 ||
