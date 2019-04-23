@@ -37,21 +37,11 @@ grammar Language::Picat::Grammar
 
   rule function-definition
     {
-    <atom-or-call> '=>'
+    <atom-or-call> [ '?=>' | '=>' ]
       <comment>*
-      [ <statement> <comma> <comment>* ]*
-      <statement> <comment>*
+      [ <statement> <comma> ]*
+      <statement>
     <period>
-    }
-
-  rule fact-definition
-    {
-    <atom-or-call> '?=>'
-      <comment>*
-      <expression>+ %% [ <comment>* <comma> ]
-      <comment>*
-    <period>
-    <comment>*
     }
 
   rule variable-list
@@ -80,6 +70,15 @@ grammar Language::Picat::Grammar
     '(' <expression>? ')'
     }
 
+  rule terminal
+    {
+    | <atom-or-call>
+    | <variable-name>
+    | <variable-list>
+    | <list-expression>
+    | <unsigned-number>
+    }
+
   rule primary-expression
     {
     | <atom-or-call>
@@ -87,7 +86,7 @@ grammar Language::Picat::Grammar
     | <variable-list>
     | <list-expression>
     | <unsigned-number>
-    | <parentheses-expression>
+    | <terminal>
     }
 
   rule binding
@@ -200,31 +199,10 @@ grammar Language::Picat::Grammar
 <comment>+
 
 'table'
-<fact-definition>
+<function-definition>+ %% <comment>*
 
-<fact-definition>
-
-<fact-definition>
-
-<fact-definition>
-
-<function-definition>
-<comment>
-
-<function-definition>
-
-<comment>+
 'table'
-<fact-definition>
-
-<fact-definition>
-
-<fact-definition>
-
-<fact-definition>
-
-<function-definition>
-<comment>+
+<function-definition>+ %% <comment>*
 
 ||
 
