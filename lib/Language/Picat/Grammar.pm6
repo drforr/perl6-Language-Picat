@@ -7,10 +7,7 @@ grammar Language::Picat::Grammar
 
   token module-name { \w+ }
 
-  token function-name
-    {
-    '$'? \w+
-    }
+  token function-name { '$'? \w+ }
 
   token variable-name
     {
@@ -26,7 +23,7 @@ grammar Language::Picat::Grammar
 
   rule import-declaration
     {
-    'import' <comment>* <module-name>+ %% <comma> <period> <comment>*
+    'import' <comment>* <module-name>+ %% <comma> <period>
     }
 
   token comment
@@ -35,8 +32,8 @@ grammar Language::Picat::Grammar
     | '%' .*? $$ \s*
     }
 
-  token table-mode { [ '+' | '-' | 'min' | 'max' | 'nt' ] }
-  token index-mode { [ '+' | '-' ] }
+  token table-mode { '+' | '-' | 'min' | 'max' | 'nt' }
+  token index-mode { '+' | '-' }
 
   rule predicate-directive
     {
@@ -49,18 +46,13 @@ grammar Language::Picat::Grammar
     {
     <predicate-directive>? <comment>* <atom-or-call>
       [
-        [ '?=>' | '=>' ]
-      <comment>*
-      [ <statement> <comma> ]*
-      <statement>
+        [ '?=>' | '=>' ] <comment>*
+      <statement>+ %% <comma>
       ]?
     <period>
     }
 
-  rule variable-list
-    {
-    '[' <expression>* %% <comma> ']'
-    }
+  rule variable-list { '[' <expression>* %% <comma> ']' }
 
   rule list-expression
     {
@@ -73,15 +65,9 @@ grammar Language::Picat::Grammar
     | <function-name>
     }
 
-  token unsigned-number
-    {
-    | \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]?
-    }
+  token unsigned-number { \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]? }
 
-  rule parentheses-expression
-    {
-    '(' <expression>? ')'
-    }
+  rule parentheses-expression { '(' <expression>? ')' }
 
   rule terminal
     {
@@ -102,10 +88,7 @@ grammar Language::Picat::Grammar
     | <terminal>
     }
 
-  rule binding
-    {
-    | <variable-name> ':=' <expression>
-    }
+  rule binding { <variable-name> ':=' <expression> }
 
   rule expression
     {
@@ -163,10 +146,7 @@ grammar Language::Picat::Grammar
     <primary-expression> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
     }
 
-  rule range
-    {
-    <expression> [ '..' <expression> [ '..' <expression> ]? ]?
-    }
+  rule range { <expression> [ '..' <expression> ] ** {0..2} }
 
   rule foreach
     {
