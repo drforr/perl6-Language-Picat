@@ -11,9 +11,11 @@ grammar Language::Picat::Grammar
 
   token variable-name
     {
-    | \w+ '[' \w+ ']'
-    | \w+ [ '.' \w+ ]*
-    | \w+
+    \w+
+      [
+      | '[' \w+ ']'
+      | [ '.' \w+ ]+
+      ]?
     }
 
   rule module-declaration
@@ -35,11 +37,14 @@ grammar Language::Picat::Grammar
   token table-mode { '+' | '-' | 'min' | 'max' | 'nt' }
   token index-mode { '+' | '-' }
 
+  rule table-modes { '(' <table-mode>+ %% <comma> ')' }
+  rule index-modes { '(' <index-mode>+ %% <comma> ')' }
+
   rule predicate-directive
     {
     | 'private'
-    | 'table' [ '(' <table-mode>+ %% <comma> ')' ]?
-    | 'index' [ '(' <index-mode>+ %% <comma> ')' ]?
+    | 'table' <table-modes>?
+    | 'index' <index-modes>?
     }
 
   rule function-definition
@@ -59,11 +64,9 @@ grammar Language::Picat::Grammar
     '[' <expression> ':' <expression> 'in' <range> ',' <expression> ']'
     }
 
-  rule atom-or-call
-    {
-    | <function-name> '(' <expression>+ %% <comma> ')'
-    | <function-name>
-    }
+  rule argument-list { '(' <expression>+ %% <comma> ')' }
+
+  rule atom-or-call { <function-name> <argument-list>? }
 
   token unsigned-number { \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]? }
 
