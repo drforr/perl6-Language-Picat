@@ -11,11 +11,8 @@ grammar Language::Picat::Grammar
 
   token variable-name
     {
-    \w+
-      [
-      | '[' \w+ ']'
-      | [ '.' \w+ ]+
-      ]?
+    | \w+ [ '[' \w+ ']' | [ '.' \w+ ]+ ]?
+    | '"' [ <-[ " ]> | '\\\"' ]* '"'
     }
 
   rule module-declaration
