@@ -112,17 +112,17 @@ grammar Language::Picat::Grammar
 
   rule exponent-expression
     {
-    <shift-expression> [ '**' <shift-expression> ]*
+    <shift-expression>+ %% '**'
     }
 
   rule shift-expression
     {
-    <add-expression> [ [ '<<' | '>>' ] <add-expression> ]*
+    <add-expression>+ %% [ '<<' | '>>' ]
     }
 
   rule add-expression
     {
-    <multiply-expression> [ [ '+' | '-' ] <multiply-expression> ]*
+    <multiply-expression>+ %% [ '+' | '-' ]
     }
 
   rule multiply-expression
@@ -141,12 +141,12 @@ grammar Language::Picat::Grammar
 
   rule bitwise-expression
     {
-    <logic-expression> [ [ '^' | '/\\' | '\\/' ] <logic-expression> ]*
+    <logic-expression>+ %% [ '^' | '/\\' | '\\/' ]
     }
 
   rule logic-expression
     {
-    <primary-expression> [ [ '==' | '<=' | '>=' | '<' | '>' ] <expression> ]*
+    <primary-expression>+ %% [ '==' | '<=' | '>=' | '<' | '>' ]
     }
 
   rule range { <expression> [ '..' <expression> ] ** {0..2} }
