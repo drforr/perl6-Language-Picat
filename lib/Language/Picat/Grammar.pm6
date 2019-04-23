@@ -35,9 +35,19 @@ grammar Language::Picat::Grammar
     | '%' .*? $$ \s*
     }
 
+  token table-mode { [ '+' | '-' | 'min' | 'max' | 'nt' ] }
+  token index-mode { [ '+' | '-' ] }
+
+  rule predicate-directive
+    {
+    | 'private'
+    | 'table' [ '(' <table-mode>+ %% <comma> ')' ]?
+    | 'index' [ '(' <index-mode>+ %% <comma> ')' ]?
+    }
+
   rule function-definition
     {
-    <atom-or-call> [ '?=>' | '=>' ]
+    <predicate-directive>? <comment>* <atom-or-call> [ '?=>' | '=>' ]
       <comment>*
       [ <statement> <comma> ]*
       <statement>
