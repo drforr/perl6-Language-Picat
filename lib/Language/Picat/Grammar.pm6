@@ -47,10 +47,13 @@ grammar Language::Picat::Grammar
 
   rule function-definition
     {
-    <predicate-directive>? <comment>* <atom-or-call> [ '?=>' | '=>' ]
+    <predicate-directive>? <comment>* <atom-or-call>
+      [
+        [ '?=>' | '=>' ]
       <comment>*
       [ <statement> <comma> ]*
       <statement>
+      ]?
     <period>
     }
 
@@ -189,6 +192,8 @@ grammar Language::Picat::Grammar
     | <expression>
     }
 
+  rule program-body { <function-definition>+ %% <comment>* }
+
   rule TOP
     {
     ^ <comment>*
@@ -196,23 +201,5 @@ grammar Language::Picat::Grammar
       <import-declaration>*
       <program-body>
     $
-    }
-
-  rule program-body
-    {
-      [
-<function-definition>+ %% <comment>*
-
-'index(-)'
-<comment>
-<atom-or-call> <period>
-<comment>+
-
-<function-definition>+ %% <comment>*
-
-||
-
-<function-definition>+ %% <comment>*
-      ]
     }
   }
