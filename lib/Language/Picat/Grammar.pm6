@@ -1,7 +1,16 @@
 # use Grammar::Debugger;
 # no precompilation;
+
+my role Terminals
+  {
+  token period { '.' }
+  token comma { ',' }
+  }
+
 grammar Language::Picat::Grammar
   {
+  also does Terminals;
+
   token period { '.' }
   token comma { ',' }
 
