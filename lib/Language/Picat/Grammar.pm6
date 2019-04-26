@@ -5,18 +5,34 @@ my role Terminals
   {
   token period { '.' }
   token comma { ',' }
+
+  token module-name { \w+ }
+
+  token function-name { '$'? \w+ }
+
+  token comment
+    {
+    | '/*' .*? '*/' \s*
+    | '%' .*? $$ \s*
+    }
+
+  token table-mode { '+' | '-' | 'min' | 'max' | 'nt' }
+  token index-mode { '+' | '-' }
+
+  token unsigned-number { \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]? }
+
+  token concat { '++' }
+  token power { '**' }
+  token shift { '<<' | '>>' }
+  token add-sub { '+' | '-' }
+  token mul-div { '*' | '/' | '//' | '/>' | '/<' | 'div' | 'mod' | 'rem' }
+  token bitwise { '^' | '/\\' | '\\/' }
+  token comparison { '==' | '<=' | '>=' | '<' | '>' }
   }
 
 grammar Language::Picat::Grammar
   {
   also does Terminals;
-
-  token period { '.' }
-  token comma { ',' }
-
-  token module-name { \w+ }
-
-  token function-name { '$'? \w+ }
 
   token variable-name
     {
@@ -33,15 +49,6 @@ grammar Language::Picat::Grammar
     {
     'import' <comment>* <module-name>+ %% <comma> <period>
     }
-
-  token comment
-    {
-    | '/*' .*? '*/' \s*
-    | '%' .*? $$ \s*
-    }
-
-  token table-mode { '+' | '-' | 'min' | 'max' | 'nt' }
-  token index-mode { '+' | '-' }
 
   rule table-modes { '(' <table-mode>+ %% <comma> ')' }
   rule index-modes { '(' <index-mode>+ %% <comma> ')' }
@@ -73,8 +80,6 @@ grammar Language::Picat::Grammar
   rule argument-list { '(' <expression>+ %% <comma> ')' }
 
   rule atom-or-call { <function-name> <argument-list>? }
-
-  token unsigned-number { \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]? }
 
   rule parentheses-expression { '(' <expression>? ')' }
 
@@ -113,46 +118,38 @@ grammar Language::Picat::Grammar
 
   rule concat-expression
     {
-    <exponent-expression> [ '++' <exponent-expression> ]*
+    <exponent-expression> [ <concat> <exponent-expression> ]*
     }
 
   rule exponent-expression
     {
-    <shift-expression>+ %% '**'
+    <shift-expression>+ %% <power>
     }
 
   rule shift-expression
     {
-    <add-expression>+ %% [ '<<' | '>>' ]
+    <add-expression>+ %% <shift>
     }
 
   rule add-expression
     {
-    <multiply-expression>+ %% [ '+' | '-' ]
+    <multiply-expression>+ %% <add-sub>
     }
 
   rule multiply-expression
     {
     <bitwise-expression>
-    [ [ '*'
-      | '/'
-      | '//'
-      | '/>'
-      | '/<'
-      | 'div'
-      | 'mod'
-      | 'rem'
-      ] <bitwise-expression> ]*
+    [ <mul-div> <bitwise-expression> ]*
     }
 
   rule bitwise-expression
     {
-    <logic-expression>+ %% [ '^' | '/\\' | '\\/' ]
+    <logic-expression>+ %% <bitwise>
     }
 
   rule logic-expression
     {
-    <primary-expression>+ %% [ '==' | '<=' | '>=' | '<' | '>' ]
+    <primary-expression>+ %% <comparison>
     }
 
   rule range { <expression> [ '..' <expression> ] ** {0..2} }
