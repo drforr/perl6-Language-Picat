@@ -3,8 +3,7 @@ use v6;
 use Test;
 use Language::Picat::Grammar;
 
-#my @files = dir( './corpus', test => /^<![ . ]> .+ \.pi/ );
-my @files = dir( './corpus-passed', test => /^<![ . ]> .+ \.pi/ );
+my @files = dir( './corpus', test => /^<![ . ]> .+ \.pi/ );
 
 plan @files.elems;
 

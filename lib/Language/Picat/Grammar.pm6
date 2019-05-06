@@ -22,23 +22,29 @@ my role Terminals
   token unsigned-number { \d+ [ '.' \d+ [ <[ e E ]> \d+ ]? ]? }
 
   token concat { '++' }
+  token range { '..' }
   token power { '**' }
   token shift { '<<' | '>>' }
   token add-sub { '+' | '-' }
   token mul-div { '*' | '/' | '//' | '/>' | '/<' | 'div' | 'mod' | 'rem' }
   token bitwise { '^' | '/\\' | '\\/' }
   token comparison { '==' | '<=' | '>=' | '<' | '>' }
+
+  token string
+    {
+    | "'" ~ "'" [ <-[ ' ]>+ | "\\\'" ]*
+    | '"' ~ '"' [ <-[ " ]>+ | '\\\"' ]*
+    }
+  token variable-name
+    {
+    | \w+ [ '[' \w+ ']' | [ '.' \w+ ]+ ]?
+    | <string>
+    }
   }
 
 grammar Language::Picat::Grammar
   {
   also does Terminals;
-
-  token variable-name
-    {
-    | \w+ [ '[' \w+ ']' | [ '.' \w+ ]+ ]?
-    | '"' [ <-[ " ]> | '\\\"' ]* '"'
-    }
 
   rule module-declaration
     {
@@ -74,7 +80,7 @@ grammar Language::Picat::Grammar
 
   rule list-expression
     {
-    '[' <expression> ':' <expression> 'in' <range> ',' <expression> ']'
+    '[' <expression> ':' <expression> 'in' <range-expression> ',' <expression> ']'
     }
 
   rule argument-list { '(' <expression>+ %% <comma> ')' }
@@ -83,15 +89,6 @@ grammar Language::Picat::Grammar
 
   rule parentheses-expression { '(' <expression>? ')' }
 
-  rule terminal
-    {
-    | <atom-or-call>
-    | <variable-name>
-    | <variable-list>
-    | <list-expression>
-    | <unsigned-number>
-    }
-
   rule primary-expression
     {
     | <atom-or-call>
@@ -99,7 +96,6 @@ grammar Language::Picat::Grammar
     | <variable-list>
     | <list-expression>
     | <unsigned-number>
-    | <terminal>
     }
 
   rule binding { <variable-name> ':=' <expression> }
@@ -121,20 +117,11 @@ grammar Language::Picat::Grammar
     <exponent-expression> [ <concat> <exponent-expression> ]*
     }
 
-  rule exponent-expression
-    {
-    <shift-expression>+ %% <power>
-    }
+  rule exponent-expression { <shift-expression>+ %% <power> }
 
-  rule shift-expression
-    {
-    <add-expression>+ %% <shift>
-    }
+  rule shift-expression { <add-expression>+ %% <shift> }
 
-  rule add-expression
-    {
-    <multiply-expression>+ %% <add-sub>
-    }
+  rule add-expression { <multiply-expression>+ %% <add-sub> }
 
   rule multiply-expression
     {
@@ -142,21 +129,15 @@ grammar Language::Picat::Grammar
     [ <mul-div> <bitwise-expression> ]*
     }
 
-  rule bitwise-expression
-    {
-    <logic-expression>+ %% <bitwise>
-    }
+  rule bitwise-expression { <logic-expression>+ %% <bitwise> }
 
-  rule logic-expression
-    {
-    <primary-expression>+ %% <comparison>
-    }
+  rule logic-expression { <primary-expression>+ %% <comparison> }
 
-  rule range { <expression> [ '..' <expression> ] ** {0..2} }
+  rule range-expression { <expression> [ <range> <expression> ] ** {0..2} }
 
   rule foreach
     {
-    'foreach' '(' <variable-name> 'in' <range> ')'
+    'foreach' '(' <variable-name> 'in' <range-expression> ')'
       [ <statement> <comma> <comment>* ]*
       <statement> <comment>*
     'end'
