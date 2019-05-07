@@ -50,10 +50,30 @@ my role Terminals
     | \" ~ \" [ <-[ " \\ ]>+ | <escape-sequence> ]*
     }
 
+  token anonymous-variable { '_' }
+
+  token alphanumeric
+    {
+    <[ a .. z A .. Z 0 .. 9 _ ]>
+    }
+
+  token capital-letter { <[ A .. Z ]> }
+
+  token named-variable
+    {
+    | '_' <alphanumeric>+
+    | <capital-letter> <alphanumeric>*
+    }
+
+  token variable
+    {
+    | <anonymous-variable>
+    | <named-variable>
+    }
+
   token variable-name
     {
     | \w+ [ '[' \w+ ']' | [ '.' \w+ ]+ ]?
-    | <string>
     }
   }
 
@@ -106,6 +126,9 @@ grammar Language::Picat::Grammar
 
   rule primary-expression
     {
+    #| <variable> '[' <argument> [ <comma> <argument> ]? ']' # Blueprint
+    | <variable> '[' \w+ [ <comma> \w+ ]? ']'
+    | <variable>
     | <atom-or-call>
     | <variable-name>
     | <variable-list>
