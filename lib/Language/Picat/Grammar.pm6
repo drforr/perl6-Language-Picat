@@ -30,11 +30,26 @@ my role Terminals
   token bitwise { '^' | '/\\' | '\\/' }
   token comparison { '==' | '<=' | '>=' | '<' | '>' }
 
-  token string
+  token hex-digit { <[ 0 .. 9 a .. f A .. F ]> } # Blueprinted
+
+  token unicode-escape # Blueprinted
     {
-    | "'" ~ "'" [ <-[ ' ]>+ | "\\\'" ]*
-    | '"' ~ '"' [ <-[ " ]>+ | '\\\"' ]*
+    | "\\u" <hex-digit> {4..4}
+    | "\\U" <hex-digit> {8..8}
     }
+
+  token escape-sequence # Blueprinted
+    {
+    | '\\' <[ b t n f r " ' \\ ]>
+    | <unicode-escape>
+    }
+
+  token string # Blueprinted
+    {
+    | \' ~ \' [ <-[ ' \\ ]>+ | <escape-sequence> ]*
+    | \" ~ \" [ <-[ " \\ ]>+ | <escape-sequence> ]*
+    }
+
   token variable-name
     {
     | \w+ [ '[' \w+ ']' | [ '.' \w+ ]+ ]?
